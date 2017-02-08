@@ -1,0 +1,7 @@
+
+* Planeación GrowSome Project
+
+Queremos usar la base que ya tenemos con el intento de hacer webbbapp.
+Pero antes necesitamos limpiar varias cosas como lo son:
+- User interface relacionado con GrowSome
+- La manera en que generamos las vistas (que NO sea creando multiples vistas)
