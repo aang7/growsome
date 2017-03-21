@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GrowSome</string>
+    <string name="title_activity_login">Iniciar Sesión</string>
+    <string name="prompt_email">Correo</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_settings">Configuración</string>
+    <string name="action_sign_in">Iniciar Sesión</string>
+    <string name="action_sign_in_short">Iniciar Sesión</string>
+    <string name="bad_url">Url Incorrecto</string>
+    <string name="error_field_required">Campo requerido</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_invalid_email">El correo ingresado es invalido</string>
+    <string name="error_invalid_password">Contrasña muy corta</string>
+    <string name="no_data">Sin datos del servidor</string>
+    <string name="no_internet">No hay internet</string>
+    <string name="title_activity_main">Main</string>
+</resources>
