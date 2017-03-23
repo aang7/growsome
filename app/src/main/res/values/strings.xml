@@ -10,7 +10,7 @@
     <string name="no_data">No data from server</string>
     <string name="no_internet">No internet</string>
 
-    <!-- Login -->
+    <!-- Activity Login -->
     <string name="title_activity_login">Log In</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -21,11 +21,14 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
 
-    <!-- Main -->
+    <!-- Activity Main -->
     <string name="title_activity_main">Main</string>
 
     <!-- Navigation Drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Fragment Home -->
+    <string name="home_string">Este es Home Fragment!</string>
 
 </resources>
