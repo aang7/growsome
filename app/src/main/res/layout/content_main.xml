@@ -13,6 +13,7 @@
     tools:context="xyz.growsome.growsome.Main"
     tools:showIn="@layout/app_bar_main">
 
+    <!-- Layout que usamos para rellenar con fragments -->
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
