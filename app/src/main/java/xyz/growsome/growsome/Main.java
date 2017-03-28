@@ -59,6 +59,7 @@ public class Main extends AppCompatActivity
         }
     }
 
+    /* Here we can handle which menu object will represent the action bar */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -85,19 +86,22 @@ public class Main extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        String title = "";
 
         if (id == R.id.gastos_item) {
             fragment = new GastosMainFragment();
+            title = "Gastos";
         } else if (id == R.id.ingresos_item) {
             fragment = new HomeFragment(); //sample only
+            title = "Ingresos";
         } else {
             fragment = new HomeFragment();
+            title = "Main";
         }
         setFragment(fragment);
-
+        getSupportActionBar().setTitle(title);//for the moment..
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -110,5 +114,6 @@ public class Main extends AppCompatActivity
         ft.addToBackStack(null);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
+
     }
 }
