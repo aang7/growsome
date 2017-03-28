@@ -5,7 +5,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.TextViewCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -136,14 +135,12 @@ public class Main extends AppCompatActivity
         else if (id == R.id.gastos_item)
         {
             fragment = new GastosMainFragment();
-            title = "Gastos";
-        else {
-            title = "Ingresos";
+        }
+        else
+        {
             fragment = new HomeFragment();
-            title = "Main";
         }
         setFragment(fragment);
-        getSupportActionBar().setTitle(title);//for the moment..
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

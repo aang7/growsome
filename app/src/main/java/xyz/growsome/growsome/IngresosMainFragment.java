@@ -23,6 +23,7 @@ public class IngresosMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        getActivity().setTitle(R.string.ingresos_fragment_title);
         return inflater.inflate(R.layout.fragment_ingresos_main, container, false);
     }
 

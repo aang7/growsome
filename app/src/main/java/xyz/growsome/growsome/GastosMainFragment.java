@@ -23,6 +23,7 @@ public class GastosMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        getActivity().setTitle(R.string.gastos_fragment_title);
         return inflater.inflate(R.layout.fragment_gastos_main, container, false);
     }
 
