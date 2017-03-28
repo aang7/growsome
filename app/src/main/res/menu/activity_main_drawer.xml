@@ -3,27 +3,31 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/gastos_item"
-            android:title="Gastos" />
+            android:id="@+id/home_item"
+            android:icon="@drawable/ic_home_black"
+            android:title="Home"
+            android:checked="true"/>
         <item
             android:id="@+id/ingresos_item"
+            android:icon="@drawable/ic_attach_money_black"
             android:title="Ingresos" />
-        <item android:id="@+id/home_item"
-            android:title="Home" />
-
+        <item
+            android:id="@+id/gastos_item"
+            android:icon="@drawable/ic_money_off_black"
+            android:title="Gastos" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+<!--<item android:title="Communicate">
+    <menu>
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Share" />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Send" />
+    </menu>
+</item>-->
 
 </menu>

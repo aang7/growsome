@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.TextViewCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,17 +15,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.json.JSONException;
+
+import xyz.growsome.growsome.Utils.JSONHelper;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawer;
     Fragment fragment;
+    private TextView navName;
+    private TextView navEmail;
+    private ImageView navImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,6 +59,30 @@ public class Main extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //setting up home_fragment at the beginning
         setFragment(new HomeFragment());
+
+        //Obtiene informacion de el Intent que mando a llamar esta actividad.
+        Bundle b = getIntent().getExtras();
+        String jsonBundle = b.getString("webData"); //Referencia a la info traida del intent
+
+        View headerNV = navigationView.getHeaderView(0);
+
+        navName = (TextView) headerNV.findViewById(R.id.nav_name);
+        navEmail = (TextView)  headerNV.findViewById(R.id.nav_email);
+
+        //Tomando los valores del JSON
+        try
+        {
+            JSONHelper jsonParser = new JSONHelper(jsonBundle);
+            String userName = jsonParser.getJsonObject().getString("vchNombre"); //Tomo el nombre
+            String userEmail = jsonParser.getJsonObject().getString("vchCorreo"); //Tomo el Correo
+            navName.setText(userName);
+            navEmail.setText(userEmail);
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -90,13 +125,20 @@ public class Main extends AppCompatActivity
         int id = item.getItemId();
         String title = "";
 
-        if (id == R.id.gastos_item) {
+        if(id == R.id.home_item)
+        {
+            fragment = new HomeFragment();
+        }
+        else if (id == R.id.ingresos_item)
+        {
+            fragment = new IngresosMainFragment();
+        }
+        else if (id == R.id.gastos_item)
+        {
             fragment = new GastosMainFragment();
             title = "Gastos";
-        } else if (id == R.id.ingresos_item) {
-            fragment = new HomeFragment(); //sample only
+        else {
             title = "Ingresos";
-        } else {
             fragment = new HomeFragment();
             title = "Main";
         }
