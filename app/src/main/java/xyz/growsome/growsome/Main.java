@@ -139,6 +139,15 @@ public class Main extends AppCompatActivity
         {
             fragment = new GastosMainFragment();
         }
+        else if (id == R.id.settings_item)
+        {
+            Intent intent = new Intent(this, Settings.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.about_item)
+        {
+            fragment = new HomeFragment();
+        }
         else
         {
             fragment = new HomeFragment();
@@ -148,7 +157,8 @@ public class Main extends AppCompatActivity
         return true;
     }
 
-    public void setFragment(Fragment frgmnt){
+    public void setFragment(Fragment frgmnt)
+    {
         /* Fragment stuff */
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         //Layout a remplazar, instancia del fragmento, tag opcional
