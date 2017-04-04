@@ -25,9 +25,15 @@ public class IngresosMainFragment extends ListFragment {
 
     /*@Override
     public void onActivityCreated(Bundle savedState) {
-        registerForContextMenu(getListView());
 
     }*/
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        registerForContextMenu(getListView());
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
