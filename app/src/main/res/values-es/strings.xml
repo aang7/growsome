@@ -21,6 +21,9 @@
     <string name="email_register">Correo: </string>
     <string name="password_register">Contraseña: </string>
     <string name="name_register">Nombre: </string>
+    <string name="action_sign_up">Crear Cuenta</string>
+    <string name="error_invalid_name">Nombre Invalido</string>
+    <string name="title_activity_register">Registro</string>
 
 </resources>
 
