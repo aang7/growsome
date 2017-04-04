@@ -73,7 +73,14 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 attemptLogin();
             }
         });
-
+        Button btnRegister = (Button) findViewById(R.id.register_button);
+        btnRegister.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Login.this, Register.class);
+                startActivity(intent);
+            }
+        });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }

@@ -6,6 +6,7 @@
     <string name="prompt_password">Contraseña</string>
     <string name="action_settings">Configuración</string>
     <string name="action_sign_in">Iniciar Sesión</string>
+    <string name="action_register">Registrar</string>
     <string name="action_sign_in_short">Iniciar Sesión</string>
     <string name="bad_url">Url Incorrecto</string>
     <string name="error_field_required">Campo requerido</string>
@@ -15,4 +16,11 @@
     <string name="no_data">Sin datos del servidor</string>
     <string name="no_internet">No hay internet</string>
     <string name="title_activity_main">Main</string>
+
+    <!-- Register Activity -->
+    <string name="email_register">Correo: </string>
+    <string name="password_register">Contraseña: </string>
+    <string name="name_register">Nombre: </string>
+
 </resources>
+
