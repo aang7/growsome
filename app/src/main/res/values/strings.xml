@@ -119,4 +119,26 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
+    <!-- example for vega class -->
+    <string-array name="stores">
+        <item>Cambridge</item>
+        <item>Sebastopol</item>
+        <item>Harvard</item>
+        <item>High School</item>
+        <item>Google</item>
+        <item>Apple</item>
+        <item>Pie</item>
+    </string-array>
+
+    <string-array name="dummy">
+        <item>Work</item>
+        <item>Greenapsis</item>
+        <item>Practice</item>
+        <item>Dummy</item>
+        <item>University</item>
+        <item>Microsoft</item>
+        <item>Tesla</item>
+        <item>Stuff</item>
+    </string-array>
+
 </resources>
