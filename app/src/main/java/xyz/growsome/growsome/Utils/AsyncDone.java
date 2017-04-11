@@ -6,5 +6,5 @@ package xyz.growsome.growsome.Utils;
 
 public interface AsyncDone
 {
-    void onTaskFinished(String data);
+    void onTaskFinished(String data, boolean error);
 }

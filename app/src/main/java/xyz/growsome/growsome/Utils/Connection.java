@@ -30,6 +30,7 @@ public abstract class Connection extends AsyncTask<Void, Void, String> implement
     private Context myContext;
     private String Url = "http://www.growsome.xyz/service.php";
     private byte[] postDataBytes;
+    private boolean error = false;
 
     public Connection (Context context, Map<String, Object> parametros)
     {
@@ -76,11 +77,13 @@ public abstract class Connection extends AsyncTask<Void, Void, String> implement
             }
             catch (IOException ex)
             {
+                error = true;
                 return myContext.getResources().getString(R.string.bad_url);
             }
         }
         else
         {
+            error = true;
             return myContext.getResources().getString(R.string.no_internet);
         }
 
@@ -91,10 +94,10 @@ public abstract class Connection extends AsyncTask<Void, Void, String> implement
     @Override
     protected void onPostExecute(final String data)
     {
-        onTaskFinished(data);
+        onTaskFinished(data, this.error);
     }
 
-    public abstract void onTaskFinished(String data);
+    public abstract void onTaskFinished(String data, boolean error);
 
     //Genera el array de bytes para hacer el request
     protected byte[] postData(Map<String, Object> parametros) throws IOException

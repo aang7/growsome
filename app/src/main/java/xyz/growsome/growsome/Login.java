@@ -123,17 +123,24 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             parametros.put("pwd", password);
             mAuthTask = new Connection(this, parametros){
                 @Override
-                public void onTaskFinished(String data)
+                public void onTaskFinished(String data, boolean error)
                 {
                     showProgress(false);
                     if(!data.isEmpty())
                     {
-                        //TODO Se debe agregar logica para parsear el json
-                        Toast.makeText(Login.this, data, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Login.this, Main.class);
-                        intent.putExtra("webData", data);
-                        startActivity(intent);
-                        finish(); ///Finaliza  la actividad
+                        if(error)
+                        {
+                            Toast.makeText(Login.this, data, Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            //TODO Se debe agregar logica para parsear el json
+                            Toast.makeText(Login.this, data, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Login.this, Main.class);
+                            intent.putExtra("webData", data);
+                            startActivity(intent);
+                            finish(); ///Finaliza  la actividad
+                        }
                     }
                     else
                     {

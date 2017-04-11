@@ -117,7 +117,7 @@ public class Register extends AppCompatActivity {
             parametros.put("pwd", password);
             mAuthTask = new Connection(this, parametros){
                 @Override
-                public void onTaskFinished(String data)
+                public void onTaskFinished(String data, boolean error)
                 {
                     showProgress(false);
                     if(!data.isEmpty())
