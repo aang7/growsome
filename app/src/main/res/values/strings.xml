@@ -9,6 +9,7 @@
     <string name="bad_url">Url broken</string>
     <string name="no_data">No data from server</string>
     <string name="no_internet">No internet</string>
+    <string name="action_add">Add</string>
 
     <!-- Activity Login -->
     <string name="title_activity_login">Log In</string>

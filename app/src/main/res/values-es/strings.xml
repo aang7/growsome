@@ -25,5 +25,7 @@
     <string name="error_invalid_name">Nombre Invalido</string>
     <string name="title_activity_register">Registro</string>
 
+    <!-- App -->
+    <string name="action_add">Agregar</string>
 </resources>
 
