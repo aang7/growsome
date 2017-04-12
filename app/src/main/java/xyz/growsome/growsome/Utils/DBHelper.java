@@ -4,6 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import xyz.growsome.growsome.DBTables.TableGastos;
+import xyz.growsome.growsome.DBTables.TableIngresos;
+import xyz.growsome.growsome.DBTables.TableTipoGasto;
+import xyz.growsome.growsome.DBTables.TableTipoIngreso;
+import xyz.growsome.growsome.DBTables.TableTipoUsuario;
+import xyz.growsome.growsome.DBTables.TableUsuarios;
+
 /**
  * Created by aang on 3/27/17.
  */
@@ -11,38 +18,32 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
 
-    private static final String DB_NAME = "GrowSomeDB";
+    private static final String DB_NAME = "growsome.db";
     private static final int DB_VERSION = 1;
 
-    public DBHelper(Context context) {
+    public DBHelper(Context context)
+    {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    @Override
+    public void onCreate(SQLiteDatabase database) {
+        TableUsuarios.onCreate(database);
+        TableGastos.onCreate(database);
+        TableIngresos.onCreate(database);
+        TableTipoUsuario.onCreate(database);
+        TableTipoGasto.onCreate(database);
+        TableTipoIngreso.onCreate(database);
+    }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        updateMyDatabase(sqLiteDatabase, 0, DB_VERSION);
+    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        TableUsuarios.onUpgrade(database, oldVersion, newVersion);
+        TableGastos.onUpgrade(database, oldVersion, newVersion);
+        TableIngresos.onUpgrade(database, oldVersion, newVersion);
+        TableTipoUsuario.onUpgrade(database, oldVersion, newVersion);
+        TableTipoGasto.onUpgrade(database, oldVersion, newVersion);
+        TableTipoIngreso.onUpgrade(database, oldVersion, newVersion);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        updateMyDatabase(sqLiteDatabase, oldVersion, newVersion);
-    }
-
-    public void updateMyDatabase(SQLiteDatabase db, int oldVersion,int newVersion){
-
-        if (oldVersion < 1) {
-            /* Creacion de la tabla */
-            db.execSQL("CREATE TABLE " +  DB_NAME + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + "NAME TEXT, "
-                    + "DESCRIPTION TEXT);");
-            //insertando algo --para ejemplo
-            insertSQL(db,  "INSERT INTO " + DB_NAME +
-                    "(NAME) VALUES ('PrimerNombre');");
-        }
-    }
-
-    public static void insertSQL(SQLiteDatabase db, String SQLCommand){
-        db.execSQL(SQLCommand);
-    }
 }

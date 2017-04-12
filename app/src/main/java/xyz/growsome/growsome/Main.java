@@ -83,7 +83,6 @@ public class Main extends AppCompatActivity
         {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -126,7 +125,6 @@ public class Main extends AppCompatActivity
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        String title = "";
 
         if(id == R.id.home_item)
         {
@@ -144,6 +142,7 @@ public class Main extends AppCompatActivity
         {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
+            return  true;
         }
         else if (id == R.id.about_item)
         {
@@ -153,6 +152,7 @@ public class Main extends AppCompatActivity
         {
             fragment = new HomeFragment();
         }
+
         setFragment(fragment);
         drawer.closeDrawer(GravityCompat.START);
         return true;
