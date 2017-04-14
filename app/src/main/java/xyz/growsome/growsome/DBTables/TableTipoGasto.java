@@ -13,7 +13,7 @@ public class TableTipoGasto {
     public static final String COL_DESC = "vchDesc";
     public static final String COL_DATE = "dtCreacion";
 
-    private static final String DB_CREATE = "create table"
+    private static final String DB_CREATE = "create table "
             + TABLE_NAME
             + "("
             + COL_ICOD + " integer not null primary key autoincrement, "

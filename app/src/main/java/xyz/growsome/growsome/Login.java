@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
@@ -21,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import xyz.growsome.growsome.Utils.Connection;
+import xyz.growsome.growsome.Utils.DBHelper;
 
 /**
  * Descripcion: Activity de login de la aplicacion
@@ -43,6 +45,17 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DBHelper dbHelper = new DBHelper(this);
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        if(checkDB(db))
+        {
+            Intent intent = new Intent(Login.this, Main.class);
+            startActivity(intent);
+            finish(); ///Finaliza  la actividad
+        }
 
         // Se liga la vista
         setContentView(R.layout.activity_login);
@@ -71,6 +84,24 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private boolean checkDB(SQLiteDatabase db)
+    {
+        try
+        {
+            Cursor cursor = db.rawQuery("select * from Usuarios", new String[]{});
+            cursor.moveToFirst();
+            int id = cursor.getInt(0);
+            String vchCorreo = cursor.getString(2);
+            id++;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void attemptLogin()
@@ -164,9 +195,9 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     }
 
     // Animacion del proceso
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    private void showProgress(final boolean show)
+    {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2)
         {

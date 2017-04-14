@@ -4,12 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import xyz.growsome.growsome.DBTables.TableGastos;
-import xyz.growsome.growsome.DBTables.TableIngresos;
-import xyz.growsome.growsome.DBTables.TableTipoGasto;
-import xyz.growsome.growsome.DBTables.TableTipoIngreso;
-import xyz.growsome.growsome.DBTables.TableTipoUsuario;
-import xyz.growsome.growsome.DBTables.TableUsuarios;
+import xyz.growsome.growsome.DBTables.*;
 
 /**
  * Created by aang on 3/27/17.

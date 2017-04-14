@@ -1,11 +1,18 @@
 package xyz.growsome.growsome;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,7 +26,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+import java.security.Permission;
+
+import xyz.growsome.growsome.DBTables.TableUsuarios;
+import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.JSONHelper;
 
 public class Main extends AppCompatActivity
@@ -42,9 +58,42 @@ public class Main extends AppCompatActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View view)
+            {
+                //Codigo temporal para exportar la base de datos a Descargas;
+                try
+                {
+                    int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+                    int request = 0;
+
+                    if(permissionCheck != PackageManager.PERMISSION_GRANTED)
+                    {
+                        ActivityCompat.requestPermissions(Main.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                request);
+                    }
+
+                    File backupDB = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                            "growsome.db");
+                    File currentDB = getApplicationContext().getDatabasePath("growsome.db");
+                    if (currentDB.exists()) {
+                        FileChannel src = new FileInputStream(currentDB).getChannel();
+                        FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                        dst.transferFrom(src, 0, src.size());
+                        src.close();
+                        dst.close();
+                    }
+                    Snackbar.make(view, "Database Exported", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+                catch(Exception ex)
+                {
+                    Log.d("FAILED",ex.toString());
+                    Snackbar.make(view, "Failed", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
@@ -62,26 +111,32 @@ public class Main extends AppCompatActivity
 
         //Obtiene informacion de el Intent que mando a llamar esta actividad.
         Bundle b = getIntent().getExtras();
-        String jsonBundle = b.getString("webData"); //Referencia a la info traida del intent
-
-        View headerNV = navigationView.getHeaderView(0);
-
-        navName = (TextView) headerNV.findViewById(R.id.nav_name);
-        navEmail = (TextView)  headerNV.findViewById(R.id.nav_email);
-
-        //Tomando los valores del JSON
-        try
+        if(b != null)
         {
-            JSONHelper jsonParser = new JSONHelper(jsonBundle);
-            String userName = jsonParser.getJsonObject().getString("vchNombre"); //Tomo el nombre
-            String userEmail = jsonParser.getJsonObject().getString("vchCorreo"); //Tomo el Correo
-            navName.setText(userName);
-            navEmail.setText(userEmail);
+            String jsonBundle = b.getString("webData"); //Referencia a la info traida del intent
 
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
+            View headerNV = navigationView.getHeaderView(0);
+
+            navName = (TextView) headerNV.findViewById(R.id.nav_name);
+            navEmail = (TextView)  headerNV.findViewById(R.id.nav_email);
+
+            //Tomando los valores del JSON
+            try
+            {
+                JSONHelper jsonParser = new JSONHelper(jsonBundle);
+                JSONObject jsonObj = jsonParser.getJsonObject();
+                String userName = jsonParser.getJsonObject().getString("vchNombre"); //Tomo el nombre
+                String userEmail = jsonParser.getJsonObject().getString("vchCorreo"); //Tomo el Correo
+                navName.setText(userName);
+                navEmail.setText(userEmail);
+                DBHelper dbHelper =  new DBHelper(this);
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+                TableUsuarios.insert(db, jsonObj);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -114,6 +169,17 @@ public class Main extends AppCompatActivity
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
             return true;
+        }
+        else if(id == R.id.action_logout) {
+
+            this.deleteDatabase("growsome.db");
+            Intent i = getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            return true;
+
         }
 
         return super.onOptionsItemSelected(item);

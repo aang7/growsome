@@ -2,6 +2,10 @@ package xyz.growsome.growsome.DBTables;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import org.json.JSONObject;
+
+import static android.R.attr.data;
+
 /**
  * Created by cheko on 11/04/2017.
  */
@@ -18,7 +22,7 @@ public class TableUsuarios {
     public static final String COL_HASH = "vchHash";
     public static final String COL_DATE = "dtCreacion";
 
-    private static final String DB_CREATE = "create table"
+    private static final String DB_CREATE = "create table "
             + TABLE_NAME
             + "("
             + COL_ICOD + " integer not null primary key autoincrement, "
@@ -40,5 +44,42 @@ public class TableUsuarios {
     {
         database.execSQL("drop table if exits" + TABLE_NAME);
         onCreate(database);
+    }
+
+    public static boolean insert(SQLiteDatabase db, JSONObject obj)
+    {
+        try
+        {
+            String var = obj.getString("iCodTipoUsuario");
+
+            String query = "insert into "
+                    + TABLE_NAME
+                    + "("
+                    + COL_ICODTIPO + ", "
+                    + COL_CORREO + ", "
+                    + COL_PWD + ", "
+                    + COL_NOMBRE + ", "
+                    + COL_ACTIVO + ", "
+                    + COL_HASH + ", "
+                    + COL_DATE
+                    + ")"
+                    + " values "
+                    + "(" + obj.getString(COL_ICODTIPO) + ", "
+                    + "'" + obj.getString(COL_CORREO) + "', "
+                    + "'" + obj.getString(COL_PWD) + "', "
+                    + "'" + obj.getString(COL_NOMBRE) + "', "
+                    + "" + obj.getString(COL_ACTIVO) + ", "
+                    + "'" + obj.getString(COL_HASH) + "', "
+                    + "'" + obj.getString(COL_DATE) + "'"
+                    + ");";
+
+            db.execSQL(query);
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

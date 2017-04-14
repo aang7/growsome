@@ -14,8 +14,8 @@ public class JSONHelper {
 
     public JSONHelper (String string){
 
-        try {
-
+        try
+        {
             JSONArray jsonArray = new JSONArray(string);
 
             // looping through All Contacts
@@ -23,17 +23,20 @@ public class JSONHelper {
                 jsonObject = jsonArray.getJSONObject(i);
 
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e)
+        {
             e.printStackTrace();
-            try {
-
+            try
+            {
                 jsonObject = new JSONObject(string);
-            } catch (JSONException e1) {
+            }
+            catch (JSONException e1)
+            {
                 e1.printStackTrace();
             }
         }
     }
-
 
     public JSONObject getJsonObject(){
         return this.jsonObject;
