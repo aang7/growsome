@@ -28,7 +28,7 @@ public class TableTipoUsuario {
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
     {
-        database.execSQL("drop table if exits" + TABLE_NAME);
+        database.execSQL("drop table if exists " + TABLE_NAME);
         onCreate(database);
     }
 }

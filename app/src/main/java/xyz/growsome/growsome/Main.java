@@ -125,7 +125,7 @@ public class Main extends AppCompatActivity
             {
                 JSONHelper jsonParser = new JSONHelper(jsonBundle);
                 JSONObject jsonObj = jsonParser.getJsonObject();
-                String userName = jsonParser.getJsonObject().getString("vchNombre"); //Tomo el nombre
+                String userName = jsonParser.getJsonObject().getString("vchUsuario"); //Tomo el nombre
                 String userEmail = jsonParser.getJsonObject().getString("vchCorreo"); //Tomo el Correo
                 navName.setText(userName);
                 navEmail.setText(userEmail);
