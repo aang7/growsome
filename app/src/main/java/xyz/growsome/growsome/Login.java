@@ -175,7 +175,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                     }
                     else
                     {
-                        Toast.makeText(Login.this, R.string.no_data, Toast.LENGTH_LONG).show();
+                        Toast.makeText(Login.this, R.string.error_no_data, Toast.LENGTH_LONG).show();
                     }
                 }
             };

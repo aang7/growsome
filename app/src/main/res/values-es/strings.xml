@@ -1,43 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">GrowSome</string>
-    <string name="title_activity_login">Iniciar Sesión</string>
-    <string name="prompt_email">Correo</string>
-    <string name="prompt_password">Contraseña</string>
+    <string name="action_add">Agregar</string>
+    <string name="action_delete">Borrar</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_logout">Cerrar Sesión</string>
+    <string name="action_register">Registrarse</string>
     <string name="action_settings">Configuración</string>
     <string name="action_sign_in">Iniciar Sesión</string>
-    <string name="action_register">Registrar</string>
-    <string name="action_sign_in_short">Iniciar Sesión</string>
-    <string name="bad_url">Url Incorrecto</string>
-    <string name="error_field_required">Campo requerido</string>
+    <string name="error_bad_url">Url incorrecto</string>
+    <string name="error_field_required">Este campo es requerido</string>
     <string name="error_incorrect_password">Contraseña incorrecta</string>
-    <string name="error_invalid_email">El correo ingresado es invalido</string>
-    <string name="error_invalid_password">Contrasña muy corta</string>
-    <string name="no_data">Sin datos del servidor</string>
-    <string name="no_internet">No hay internet</string>
+    <string name="error_invalid_email">Correo electrónico incorrecto</string>
+    <string name="error_invalid_name">Nombre invalido</string>
+    <string name="error_invalid_password">Contraseña muy corta</string>
+    <string name="error_no_data">Sin datos del servidor</string>
+    <string name="error_no_internet">No hay internet</string>
+    <string name="field_amount">Monto</string>
+    <string name="field_category">Categoria</string>
+    <string name="field_desc">Descripción</string>
+    <string name="field_email">Correo</string>
+    <string name="field_name">Nombre</string>
+    <string name="field_password">Contraseña</string>
+    <string name="field_user">Usuario</string>
+    <string name="gastos_type">Tipo de gasto</string>
+    <string name="ingresos_type">Tipo de ingreso</string>
+    <string name="navigation_drawer_close"></string>
+    <string name="title_activity_login">Iniciar Sesíon</string>
     <string name="title_activity_main">Main</string>
-
-    <!-- Register Activity -->
-    <string name="email_register">Correo: </string>
-    <string name="password_register">Contraseña: </string>
-    <string name="name_register">Nombre: </string>
-    <string name="action_sign_up">Crear Cuenta</string>
-    <string name="error_invalid_name">Nombre Invalido</string>
     <string name="title_activity_register">Registro</string>
-
-    <!-- App -->
-    <string name="action_add">Agregar</string>
-
-
-    <string name="name">nombre</string>
-    <string name="monto">monto</string>
-    <string name="description">descripción</string>
-
-    <string-array name="spinner_ingresosType">
-        <item>Salario</item>
-        <item>Pago</item>
-    </string-array>
-
-
+    <string name="title_activity_settings">Configuración</string>
+    <string name="title_fragment_gastos">Gastos</string>
+    <string name="title_fragment_home">Inicio</string>
+    <string name="title_fragment_ingresos">Ingresos</string>
+    <string name="field_cost">Costo</string>
 </resources>
 

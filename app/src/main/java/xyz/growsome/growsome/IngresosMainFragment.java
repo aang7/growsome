@@ -3,7 +3,6 @@ package xyz.growsome.growsome;
 
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.ContextMenu;
@@ -52,7 +51,7 @@ public class IngresosMainFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle(R.string.ingresos_fragment_title);
+        getActivity().setTitle(R.string.title_fragment_ingresos);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 inflater.getContext(),
                 android.R.layout.simple_list_item_1,
@@ -68,7 +67,7 @@ public class IngresosMainFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.ingresos_menu, menu);
+        inflater.inflate(R.menu.add_menu, menu);
     }
 
 

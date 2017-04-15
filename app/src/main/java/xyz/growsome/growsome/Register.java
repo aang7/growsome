@@ -130,7 +130,7 @@ public class Register extends AppCompatActivity {
                     }
                     else
                     {
-                        Toast.makeText(Register.this, R.string.no_data, Toast.LENGTH_LONG).show();
+                        Toast.makeText(Register.this, R.string.error_no_data, Toast.LENGTH_LONG).show();
                     }
                 }
             };

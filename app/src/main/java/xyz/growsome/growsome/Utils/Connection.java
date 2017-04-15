@@ -78,13 +78,13 @@ public abstract class Connection extends AsyncTask<Void, Void, String> implement
             catch (IOException ex)
             {
                 error = true;
-                return myContext.getResources().getString(R.string.bad_url);
+                return myContext.getResources().getString(R.string.error_bad_url);
             }
         }
         else
         {
             error = true;
-            return myContext.getResources().getString(R.string.no_internet);
+            return myContext.getResources().getString(R.string.error_no_internet);
         }
 
         return result;

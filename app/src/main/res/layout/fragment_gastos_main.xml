@@ -7,6 +7,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/gastos_string" />
+        android:text="@string/title_fragment_gastos" />
 
 </FrameLayout>

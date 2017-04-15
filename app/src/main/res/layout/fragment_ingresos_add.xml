@@ -4,29 +4,77 @@
     android:layout_height="match_parent"
     tools:context="xyz.growsome.growsome.Ingresos.IngresosAddFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <ScrollView
-        android:id="@+id/scroll_ingresosAdd"
+        android:id="@+id/scroll_ingresos_add"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/ingresos_add_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ingresos_type"
+                style="@style/InputLabel" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="4dp"
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_subject_black_24dp"/>
+
+                <Spinner
+                    android:id="@+id/ingresos_tipos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/field_category"
+                style="@style/InputLabel" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="4dp"
+                android:paddingBottom="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_folder_black_24dp"/>
+
+                <Spinner
+                    android:id="@+id/ingresos_cat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/fab_margin">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/editText_nombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_face_black_24dp"
-                    android:hint="@string/name"
+                    android:drawableStart="@drawable/ic_face_black_24dp"
+                    android:drawablePadding="2dp"
+                    android:hint="@string/field_name"
                     android:imeOptions="actionUnspecified"
                     android:inputType="text"
                     android:maxLines="1" />
@@ -35,15 +83,15 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/fab_margin">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/editText_monto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_attach_money_black"
-                    android:hint="@string/monto"
+                    android:drawableStart="@drawable/ic_attach_money_black"
+                    android:drawablePadding="2dp"
+                    android:hint="@string/field_amount"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
 
@@ -52,52 +100,29 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/fab_margin">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/editText_descripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_description_black_24dp"
-                    android:hint="@string/description"
+                    android:drawableStart="@drawable/ic_description_black_24dp"
+                    android:drawablePadding="2dp"
+                    android:hint="@string/field_desc"
                     android:inputType="text"
-                    android:maxLines="1" />
+                    android:maxLines="3" />
 
             </android.support.design.widget.TextInputLayout>
 
-            <RelativeLayout
+            <Button
+                android:id="@+id/btn_guardar"
+                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_add"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/typeTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Type"
-
-                    />
-                <Spinner
-                    android:layout_alignEnd="@id/typeTitle"
-                    android:id="@+id/spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-            </RelativeLayout>
-
-
-            <android.support.design.internal.BaselineLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/btn_guardar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Guardar" />
-            </android.support.design.internal.BaselineLayout>
         </LinearLayout>
     </ScrollView>
-
-
 </FrameLayout>

@@ -22,7 +22,7 @@ public class HomeFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle(R.string.home_fragment_title);
+        getActivity().setTitle(R.string.title_fragment_home);
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

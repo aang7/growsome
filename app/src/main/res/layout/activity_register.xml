@@ -38,8 +38,7 @@
                     android:id="@+id/edt_register_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/name_register"
-                    android:imeActionLabel="@string/name_register"
+                    android:hint="@string/field_user"
                     android:inputType="text"
                     android:maxLines="1"
                     />
@@ -54,8 +53,7 @@
                     android:id="@+id/edt_register_mail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:imeActionLabel="@string/action_sign_in"
+                    android:hint="@string/field_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     />
@@ -70,9 +68,7 @@
                     android:id="@+id/edt_register_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
+                    android:hint="@string/field_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     />
