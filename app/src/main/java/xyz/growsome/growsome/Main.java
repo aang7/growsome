@@ -229,8 +229,8 @@ public class Main extends AppCompatActivity
         /* Fragment stuff */
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         //Layout a remplazar, instancia del fragmento, tag opcional
-        ft.replace(R.id.content_frame, frgmnt);
-        ft.addToBackStack(null);
+        ft.replace(R.id.content_frame, frgmnt, "tag");
+        ft.addToBackStack("tag");
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
 

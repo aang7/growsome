@@ -10,13 +10,18 @@ public abstract class Ingresos {
     private String nombre;
     private double monto;
 
-   /* public Ingresos(String name, String desc, double cost)
+    public Ingresos()
+    {
+
+    }
+
+    public Ingresos(String name, String desc, double cost)
     {
         descripcion = desc;
         nombre = name;
         monto = cost;
     }
-    */
+
     public void setDescripcion(String descripc)
     {
         descripcion = descripc;

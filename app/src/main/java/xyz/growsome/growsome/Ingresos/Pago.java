@@ -6,4 +6,10 @@ package xyz.growsome.growsome.Ingresos;
 
 public class Pago extends Ingresos {
 
+
+    public Pago(String name, String descripcion, double monto)
+    {
+        super(name, descripcion, monto);
+
+    }
 }

@@ -6,4 +6,11 @@ package xyz.growsome.growsome.Ingresos;
 
 /* Salario _MENSUAL_ */
 public class Salario extends Ingresos {
+
+
+    public Salario(String name, String desc, double cost) {
+        super(name, desc, cost);
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package xyz.growsome.growsome;
 
 
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+
+import xyz.growsome.growsome.Ingresos.IngresosAddFragment;
 
 
 /**
@@ -83,8 +86,15 @@ public class IngresosMainFragment extends ListFragment {
         switch (item.getItemId())
         {
             case R.id.action_add:
-                Intent intent = new Intent(getActivity(), Settings.class); //aqui me quede
-                startActivity(intent);
+                /*Intent intent = new Intent(getActivity(), Settings.class); //aqui me quede
+                startActivity(intent);*/
+                /* Fragment stuff */
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                //Layout a remplazar, instancia del fragmento, tag opcional
+                ft.replace(R.id.content_frame, new IngresosAddFragment(), "tag");
+                ft.addToBackStack("tag");
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
             default:
                 return super.onOptionsItemSelected(item);
         }

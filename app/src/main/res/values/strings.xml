@@ -145,8 +145,16 @@
         <item>Tesla</item>
         <item>Stuff</item>
     </string-array>
+    <string-array name="spinner_ingresosType">
+        <item>Salary</item>
+        <item>Pay</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="name">name</string>
+    <string name="monto">amount</string>
+    <string name="description">description</string>
 
 </resources>

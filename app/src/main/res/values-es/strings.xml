@@ -27,5 +27,17 @@
 
     <!-- App -->
     <string name="action_add">Agregar</string>
+
+
+    <string name="name">nombre</string>
+    <string name="monto">monto</string>
+    <string name="description">descripción</string>
+
+    <string-array name="spinner_ingresosType">
+        <item>Salario</item>
+        <item>Pago</item>
+    </string-array>
+
+
 </resources>
 
