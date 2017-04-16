@@ -1,5 +1,7 @@
 package xyz.growsome.growsome.Ingresos;
 
+import java.util.Date;
+
 /**
  * Created by aang on 4/11/17.
  */
@@ -7,9 +9,9 @@ package xyz.growsome.growsome.Ingresos;
 public class Pago extends Ingresos {
 
 
-    public Pago(String name, String descripcion, double monto)
+    public Pago(int userid, String desc, String nombre, double monto, Date fecha)
     {
-        super(name, descripcion, monto);
-
+        super(userid, desc, nombre, monto, fecha);
+        setTipoid(2);
     }
 }

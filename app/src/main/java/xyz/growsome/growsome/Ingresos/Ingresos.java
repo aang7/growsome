@@ -1,30 +1,42 @@
 package xyz.growsome.growsome.Ingresos;
 
+import java.util.Date;
+
 /**
  * Created by aang on 4/11/17.
  */
 
-public abstract class Ingresos {
-
-    private String descripcion;
+public abstract class Ingresos
+{
+    private int userid;
+    private int tipoid;
+    private String desc;
     private String nombre;
     private double monto;
+    private Date fecha;
 
-    public Ingresos()
+    public Ingresos(int userid, String desc, String nombre, double monto, Date fecha)
     {
-
+        this.userid = userid;
+        this.desc = desc;
+        this.nombre = nombre;
+        this.monto = monto;
+        this.fecha = fecha;
     }
 
-    public Ingresos(String name, String desc, double cost)
+    public void setUserid(int userid)
     {
-        descripcion = desc;
-        nombre = name;
-        monto = cost;
+        this.userid = userid;
     }
 
-    public void setDescripcion(String descripc)
+    public void setTipoid(int tipoid)
     {
-        descripcion = descripc;
+        this.tipoid = tipoid;
+    }
+
+    public void setDesc(String descripc)
+    {
+        desc = descripc;
     }
 
     public void setNombre(String name)
@@ -37,14 +49,29 @@ public abstract class Ingresos {
         monto = price;
     }
 
+    public void setFecha(Date fecha)
+    {
+        this.fecha = fecha;
+    }
+
+    public int getUserid()
+    {
+        return userid;
+    }
+
+    public int getTipoid()
+    {
+        return tipoid;
+    }
+
     public String getNombre()
     {
         return nombre;
     }
 
-    public String getDescripcion()
+    public String getDesc()
     {
-        return descripcion;
+        return desc;
     }
 
     public double getMonto()
@@ -52,6 +79,8 @@ public abstract class Ingresos {
         return monto;
     }
 
-    /* tambien debo poder seleccionar el tipo de ingreso al agregar Ingreso (o bien Gasto) */
+    public Date getFecha() {
+        return fecha;
+    }
 
 }

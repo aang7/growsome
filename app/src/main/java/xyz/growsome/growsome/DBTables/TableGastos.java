@@ -10,6 +10,7 @@ public class TableGastos {
 
     public static final String TABLE_NAME = "Gastos";
     public static final String COL_ICOD = "iCodGasto";
+    public static final String COL_ICODUSUARIO = "iCodUsuario";
     public static final String COL_ICODTIPO = "iCodTipoGasto";
     public static final String COL_NOMBRE = "vchNombre";
     public static final String COL_DESC = "vchDesc";
@@ -22,6 +23,7 @@ public class TableGastos {
             + TABLE_NAME
             + "("
             + COL_ICOD + " integer not null primary key autoincrement, "
+            + COL_ICODUSUARIO + " integer not null, "
             + COL_ICODTIPO + " integer not null, "
             + COL_NOMBRE + " text not null, "
             + COL_DESC + " text, "

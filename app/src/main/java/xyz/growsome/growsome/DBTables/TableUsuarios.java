@@ -1,5 +1,6 @@
 package xyz.growsome.growsome.DBTables;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.json.JSONObject;
@@ -18,6 +19,12 @@ public class TableUsuarios {
     public static final String COL_CORREO = "vchCorreo";
     public static final String COL_NOMBRE = "vchUsuario";
     public static final String COL_DATE = "dtCreacion";
+
+    public static final int COL_ICOD_ID = 0;
+    public static final int COL_ICODTIPO_ID = 1;
+    public static final int COL_CORREO_ID = 2;
+    public static final int COL_NOMBRE_ID = 3;
+    public static final int COL_DATE_ID = 4;
 
     private static final String DB_CREATE = "create table "
             + TABLE_NAME
@@ -38,6 +45,13 @@ public class TableUsuarios {
     {
         database.execSQL("drop table if exists " + TABLE_NAME);
         onCreate(database);
+    }
+
+    public static int getUserID(SQLiteDatabase db)
+    {
+        Cursor cursor = db.rawQuery("select " + COL_ICOD +" from " + TABLE_NAME, new String[]{});
+        cursor.moveToFirst();
+        return  cursor.getInt(COL_ICOD_ID);
     }
 
     public static boolean insert(SQLiteDatabase db, JSONObject obj)

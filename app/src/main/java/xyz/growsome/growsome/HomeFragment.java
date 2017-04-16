@@ -23,6 +23,9 @@ public class HomeFragment extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         getActivity().setTitle(R.string.title_fragment_home);
+
+        ((Main)getActivity()).showFloatingActionButton();
+
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

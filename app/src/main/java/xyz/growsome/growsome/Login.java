@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
@@ -23,6 +22,7 @@ import java.util.Map;
 
 import xyz.growsome.growsome.Utils.Connection;
 import xyz.growsome.growsome.Utils.DBHelper;
+import xyz.growsome.growsome.DBTables.*;
 
 /**
  * Descripcion: Activity de login de la aplicacion
@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
+    private  DBHelper dbHelper;
     public static String email;
     public static String password;
 
@@ -46,11 +46,9 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DBHelper dbHelper = new DBHelper(this);
+        dbHelper = new DBHelper(this);
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        if(checkDB(db))
+        if(checkDB())
         {
             Intent intent = new Intent(Login.this, Main.class);
             startActivity(intent);
@@ -86,15 +84,15 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private boolean checkDB(SQLiteDatabase db)
+    private boolean checkDB()
     {
         try
         {
-            Cursor cursor = db.rawQuery("select * from Usuarios", new String[]{});
+            Cursor cursor = dbHelper.selectQuery("select * from Usuarios");
             cursor.moveToFirst();
-            int id = cursor.getInt(0);
-            String vchCorreo = cursor.getString(2);
-            id++;
+            int id = cursor.getInt(TableUsuarios.COL_ICOD_ID);
+            String vchCorreo = cursor.getString(TableUsuarios.COL_CORREO_ID);
+            cursor.close();
         }
         catch (Exception ex)
         {

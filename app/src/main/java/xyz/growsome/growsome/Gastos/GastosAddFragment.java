@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 
 /**
@@ -24,6 +25,9 @@ public class GastosAddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        ((Main)getActivity()).hideFloatingActionButton();
+
         return inflater.inflate(R.layout.fragment_gastos_add, container, false);
     }
 

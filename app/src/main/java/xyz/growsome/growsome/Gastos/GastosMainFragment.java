@@ -1,4 +1,4 @@
-package xyz.growsome.growsome;
+package xyz.growsome.growsome.Gastos;
 
 
 import android.app.FragmentTransaction;
@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import xyz.growsome.growsome.Gastos.GastosAddFragment;
-import xyz.growsome.growsome.Ingresos.IngresosAddFragment;
+import xyz.growsome.growsome.Main;
+import xyz.growsome.growsome.R;
 
 
 /**
@@ -45,6 +45,9 @@ public class GastosMainFragment extends ListFragment {
                 getResources().getStringArray(R.array.stores));
         //return inflater.inflate(R.layout.fragment_gastos_main, container, false); //original
         setListAdapter(adapter);
+
+        ((Main)getActivity()).hideFloatingActionButton();
+
         return super.onCreateView(inflater, container, savedInstanceState); //para ejemplos rapidos (muestra a vega)
     }
 

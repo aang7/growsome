@@ -1,8 +1,9 @@
-package xyz.growsome.growsome;
+package xyz.growsome.growsome.Ingresos;
 
 
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.ContextMenu;
@@ -15,7 +16,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import xyz.growsome.growsome.Ingresos.IngresosAddFragment;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import xyz.growsome.growsome.DBTables.TableIngresos;
+import xyz.growsome.growsome.DBTables.TableTipoIngreso;
+import xyz.growsome.growsome.DBTables.TableUsuarios;
+import xyz.growsome.growsome.Main;
+import xyz.growsome.growsome.R;
+import xyz.growsome.growsome.Utils.DBHelper;
 
 
 /**
@@ -23,15 +33,11 @@ import xyz.growsome.growsome.Ingresos.IngresosAddFragment;
  */
 public class IngresosMainFragment extends ListFragment {
 
+    DBHelper dbHelper;
 
     public IngresosMainFragment() {
         // Required empty public constructor
     }
-
-    /*@Override
-    public void onActivityCreated(Bundle savedState) {
-
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,16 +54,54 @@ public class IngresosMainFragment extends ListFragment {
 
     /* Esta cosa es del List Fragment*/
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         getActivity().setTitle(R.string.title_fragment_ingresos);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+
+
+        /*Se muestra como generar un objeto pago, se inserta con la clase tabla correspondiente,
+        * se usa el dbhelper para traer el cursor con la informacion, se recorre y se agrega la
+        * info a una lista que alimenta el array adapter para mostrar la info.
+        * este pedo se reinsertara cada que se cree el fragmento*/
+
+        dbHelper = new DBHelper(getActivity());
+
+        Pago p = new Pago(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), "TEST PAGO", "TEST",
+                21.3, new Date());
+
+        Salario s = new Salario(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), "TEST Salario", "TEST2",
+                23.3, new Date());
+
+        TableIngresos.insert(dbHelper.getWritableDatabase(), s);
+        TableIngresos.insert(dbHelper.getWritableDatabase(), p);
+
+        Cursor cursor = dbHelper.selectQuery(TableIngresos.SELECT_ALL);
+
+        List<String> ingresos = new ArrayList<>();
+
+        try
+        {
+            while (cursor.moveToNext())
+            {
+                ingresos.add(cursor.getString(TableIngresos.COL_NOMBRE_ID) + "; " + cursor.getString(TableIngresos.COL_DESC_ID)
+                    + "; " + String.valueOf(cursor.getDouble(TableIngresos.COL_MONTO_ID)));
+            }
+        }
+        finally
+        {
+            cursor.close();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 inflater.getContext(),
                 android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.dummy));
+                ingresos);
 
         setListAdapter(adapter);
+
+        ((Main)getActivity()).hideFloatingActionButton();
+
         //registerForContextMenu(getListAdapter());
 
         return super.onCreateView(inflater, container, savedInstanceState); //para ejemplos rapidos (muestra a vega)

@@ -13,6 +13,11 @@ public class TableTipoIngreso {
     public static final String COL_DESC = "vchDesc";
     public static final String COL_DATE = "dtCreacion";
 
+    public static final int COL_ICOD_ID = 0;
+    public static final int COL_DESC_ID = 1;
+    public static final int COL_DATE_ID = 2;
+
+
     private static final String DB_CREATE = "create table "
             + TABLE_NAME
             + "("
@@ -21,9 +26,33 @@ public class TableTipoIngreso {
             + COL_DATE + " text not null"
             + ");";
 
-    public static void  onCreate(SQLiteDatabase database)
+    private static final String[] DB_DEFAULT =  new String[] {"insert into "
+            + TABLE_NAME
+            + "("
+            + COL_DESC+ ", "
+            + COL_DATE
+            + ")"
+            + " values "
+            + "('Salario', "
+            + "datetime('now', 'localtime')); ", "insert into "
+            + TABLE_NAME
+            + "("
+            + COL_DESC+ ", "
+            + COL_DATE
+            + ")"
+            + " values "
+            + "('Pago', "
+            + "datetime('now', 'localtime')); "};
+
+    public static final String SELECT_ALL = "select * from " + TABLE_NAME;
+
+    public static void onCreate(SQLiteDatabase database)
     {
         database.execSQL(DB_CREATE);
+        for (String query : DB_DEFAULT)
+        {
+            database.execSQL(query);
+        }
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
