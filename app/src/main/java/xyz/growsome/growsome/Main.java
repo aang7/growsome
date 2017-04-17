@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -229,10 +230,11 @@ public class Main extends AppCompatActivity
     public void setFragment(Fragment frgmnt)
     {
         /* Fragment stuff */
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getFragmentManager();
         //Layout a remplazar, instancia del fragmento, tag opcional
-        ft.replace(R.id.content_frame, frgmnt, "tag");
-        ft.addToBackStack("tag");
+        FragmentTransaction ft = fragmentManager.beginTransaction().replace(R.id.content_frame, frgmnt).disallowAddToBackStack();
+        //ft.replace(R.id.content_frame, frgmnt);
+        //ft.addToBackStack(null);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
