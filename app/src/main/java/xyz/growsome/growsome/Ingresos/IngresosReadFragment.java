@@ -1,6 +1,7 @@
 package xyz.growsome.growsome.Ingresos;
 
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -39,6 +40,7 @@ public class IngresosReadFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class IngresosReadFragment extends Fragment {
     public boolean readIngreso()
     {
 
-        int item_selected = 1; //este me lo tengo que traer del otro fragment
+        int item_selected = ((DataExchange)getActivity()).getPositon(); //este me lo tengo que traer del otro fragment
         Cursor cursor = dbHelper.selectQuery("SELECT * FROM "+ TableIngresos.TABLE_NAME + " WHERE " + TableIngresos.COL_ICOD + " = " + item_selected);
 
         /* Reading the cursor*/

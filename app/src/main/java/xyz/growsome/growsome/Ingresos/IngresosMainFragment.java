@@ -6,6 +6,7 @@ import android.app.ListFragment;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +28,7 @@ import xyz.growsome.growsome.DBTables.TableUsuarios;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
+import xyz.growsome.growsome.Utils.ManageFragments;
 
 
 /**
@@ -50,6 +53,13 @@ public class IngresosMainFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         registerForContextMenu(getListView());
 
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        ((DataExchange)getActivity()).setItemPosition(position);
+        ((ManageFragments)getActivity()).startNewFragment(new IngresosReadFragment());
     }
 
     /* Esta cosa es del List Fragment*/
@@ -129,15 +139,7 @@ public class IngresosMainFragment extends ListFragment {
         switch (item.getItemId())
         {
             case R.id.action_add:
-                /*Intent intent = new Intent(getActivity(), Settings.class); //aqui me quede
-                startActivity(intent);*/
-                /* Fragment stuff */
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                //Layout a remplazar, instancia del fragmento, tag opcional
-                ft.replace(R.id.content_frame, new IngresosAddFragment(), "tag");
-                ft.addToBackStack("tag");
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.commit();
+                ((ManageFragments) getActivity()).startNewFragment(new IngresosAddFragment());
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -155,5 +157,6 @@ public class IngresosMainFragment extends ListFragment {
         }
         return super.onContextItemSelected(item);
     }
+
 
 }

@@ -37,13 +37,15 @@ import java.nio.channels.FileChannel;
 
 import xyz.growsome.growsome.DBTables.TableUsuarios;
 import xyz.growsome.growsome.Gastos.GastosMainFragment;
+import xyz.growsome.growsome.Ingresos.DataExchange;
 import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
 import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.JSONHelper;
+import xyz.growsome.growsome.Utils.ManageFragments;
 
 
 public class Main extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DrawerLocker {
+        implements NavigationView.OnNavigationItemSelectedListener, DrawerLocker, DataExchange, ManageFragments {
 
     DrawerLayout drawer;
     Fragment fragment;
@@ -208,32 +210,26 @@ public class Main extends AppCompatActivity
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if(id == R.id.home_item)
+        switch (item.getItemId())
         {
-            fragment = new HomeFragment();
-        }
-        else if (id == R.id.ingresos_item)
-        {
-            fragment = new IngresosMainFragment();
-        }
-        else if (id == R.id.gastos_item)
-        {
-            fragment = new GastosMainFragment();
-        }
-        else if (id == R.id.settings_item)
-        {
-            Intent intent = new Intent(this, Settings.class);
-            startActivity(intent);
-            return  true;
-        }
-        else if (id == R.id.about_item)
-        {
-            fragment = new HomeFragment();
-        }
-        else
-        {
-            fragment = new HomeFragment();
+            case R.id.home_item:
+                fragment = new HomeFragment();
+                break;
+            case R.id.ingresos_item:
+                fragment = new IngresosMainFragment();
+                break;
+            case R.id.gastos_item:
+                fragment = new GastosMainFragment();
+                break;
+            case R.id.settings_item:
+                Intent intent = new Intent(this, Settings.class);
+                startActivity(intent);
+                return  true;
+            case R.id.about_item:
+                fragment = new HomeFragment();
+                break;
+            default:
+                fragment = new HomeFragment();
         }
 
         setFragment(fragment);
@@ -241,14 +237,12 @@ public class Main extends AppCompatActivity
         return true;
     }
 
+    /* Fragment stuff --different to startNewFragment method */
     public void setFragment(Fragment frgmnt)
     {
-        /* Fragment stuff */
         FragmentManager fragmentManager = getFragmentManager();
         //Layout a remplazar, instancia del fragmento, tag opcional
         FragmentTransaction ft = fragmentManager.beginTransaction().replace(R.id.content_frame, frgmnt).disallowAddToBackStack();
-        //ft.replace(R.id.content_frame, frgmnt);
-        //ft.addToBackStack(null);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
@@ -269,4 +263,26 @@ public class Main extends AppCompatActivity
         toggle.setDrawerIndicatorEnabled(enabled);
 
     }
+
+    private int list_item_position;
+
+    @Override
+    public void setItemPosition(int position) {
+        list_item_position = position+1;//+1 debido al id de las tablas
+    }
+
+    @Override
+    public int getPositon() {
+        return list_item_position;
+    }
+
+    @Override
+    public void startNewFragment(Fragment fragment) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame,fragment, "tag");
+        ft.addToBackStack("tag");
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
+    }
+
 }
