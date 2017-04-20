@@ -62,6 +62,7 @@ public class IngresosMainFragment extends ListFragment {
         ((ManageFragments)getActivity()).startNewFragment(new IngresosReadFragment());
     }
 
+
     /* Esta cosa es del List Fragment*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,14 +78,14 @@ public class IngresosMainFragment extends ListFragment {
 
         dbHelper = new DBHelper(getActivity());
 
-        Pago p = new Pago(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), "TEST PAGO", "TEST",
+        /*Pago p = new Pago(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), "TEST PAGO", "TEST",
                 21.3, new Date());
 
         Salario s = new Salario(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), "TEST Salario", "TEST2",
                 23.3, new Date());
 
         TableIngresos.insert(dbHelper.getWritableDatabase(), s);
-        TableIngresos.insert(dbHelper.getWritableDatabase(), p);
+        TableIngresos.insert(dbHelper.getWritableDatabase(), p);*/
 
         Cursor cursor = dbHelper.selectQuery(TableIngresos.SELECT_ALL);
 
@@ -94,8 +95,7 @@ public class IngresosMainFragment extends ListFragment {
         {
             while (cursor.moveToNext())
             {
-                ingresos.add(cursor.getString(TableIngresos.COL_NOMBRE_ID) + "; " + cursor.getString(TableIngresos.COL_DESC_ID)
-                    + "; " + String.valueOf(cursor.getDouble(TableIngresos.COL_MONTO_ID)));
+                ingresos.add(cursor.getString(TableIngresos.COL_NOMBRE_ID));
             }
         }
         finally
@@ -148,9 +148,10 @@ public class IngresosMainFragment extends ListFragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
-                .getMenuInfo();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        ((DataExchange)getActivity()).setItemPosition(info.position);
         if (item.getTitle() == "Edit Item") {
+            ((ManageFragments)getActivity()).startNewFragment(new IngresosEditFragment());
         } else if (item.getTitle() == "Delete Item") {
 
             return true;

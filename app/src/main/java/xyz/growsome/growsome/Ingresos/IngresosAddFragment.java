@@ -65,13 +65,13 @@ public class IngresosAddFragment extends Fragment
             public void onClick(View v)
             {
                 if(saveIngreso())
-                {
-                    Toast.makeText(getActivity(), "Ingreso Insertado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Igreso Actualizado", Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStack();//close this fragment
                 }
                 else
-                {
-                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(getActivity(), "ups algo salió mal!", Toast.LENGTH_SHORT).show();
+
+
             }
         });
 

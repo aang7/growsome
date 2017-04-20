@@ -33,7 +33,6 @@ public class IngresosReadFragment extends Fragment {
     EditText et_nombre;
     EditText et_descripcion;
     EditText et_monto;
-    Button btn_save;
 
     public IngresosReadFragment() {
         // Required empty public constructor
@@ -50,7 +49,6 @@ public class IngresosReadFragment extends Fragment {
         et_nombre = (EditText) view.findViewById(R.id.editText_nombre);
         et_descripcion = (EditText) view.findViewById(R.id.editText_descripcion);
         et_monto = (EditText) view.findViewById(R.id.editText_monto);
-        btn_save = (Button) view.findViewById(R.id.btn_guardar);
         texv_type = (TextView) view.findViewById(R.id.ingresos_tipos);
         spinner_cat = (Spinner) view.findViewById(R.id.ingresos_cat);
 
@@ -65,7 +63,7 @@ public class IngresosReadFragment extends Fragment {
     public boolean readIngreso()
     {
 
-        int item_selected = ((DataExchange)getActivity()).getPositon(); //este me lo tengo que traer del otro fragment
+        int item_selected = ((DataExchange)getActivity()).getPositon(); //retrieve selected position
         Cursor cursor = dbHelper.selectQuery("SELECT * FROM "+ TableIngresos.TABLE_NAME + " WHERE " + TableIngresos.COL_ICOD + " = " + item_selected);
 
         /* Reading the cursor*/
@@ -83,8 +81,6 @@ public class IngresosReadFragment extends Fragment {
                 texv_type.setText(tipo);
 
                 //falta llenar tipo y categoria en un textView o algo asi
-                //spinner_type = (Spinner) view.findViewById(R.id.ingresos_tipos);
-                //spinner_cat = (Spinner) view.findViewById(R.id.ingresos_cat);
                 return true;
             }
 

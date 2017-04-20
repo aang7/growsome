@@ -126,4 +126,16 @@ public class TableIngresos {
 
         return true;
     }
+
+    public static boolean insert(SQLiteDatabase db, String SQLCommand){
+        try
+        {
+            db.execSQL(SQLCommand);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 }
