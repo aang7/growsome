@@ -47,10 +47,9 @@ public class IngresosAddFragment extends Fragment
     {
         dbHelper = new DBHelper(getActivity());
 
-        ((Main)getActivity()).setDrawerEnabled(false); //deshabilito drawer
+        ((Main)getActivity()).setDrawerEnabled(false); //disable drawer
 
         setHasOptionsMenu(true);//show new items
-        //((Main)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         View view = inflater.inflate(R.layout.fragment_ingresos_add, container, false);
 
@@ -78,15 +77,16 @@ public class IngresosAddFragment extends Fragment
 
         Cursor cursor = dbHelper.selectQuery(TableTipoIngreso.SELECT_ALL);
 
-        List<String> tipos = new ArrayList<>();
+        List<String> tipos = new ArrayList<>(); //solo son 2 tipos
 
         try
         {
             while (cursor.moveToNext())
             {
-                tipos.add(cursor.getString(TableTipoIngreso.COL_DESC_ID));
+                tipos.add(cursor.getString(TableTipoIngreso.COL_DESC_ID)); //Aqui ando
             }
         }
+
         finally
         {
             cursor.close();
@@ -94,7 +94,7 @@ public class IngresosAddFragment extends Fragment
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tipos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_type.setAdapter(adapter);
+        spinner_type.setAdapter(adapter); //llene los dos tipos
 
         ((Main)getActivity()).hideFloatingActionButton();
 
@@ -106,8 +106,7 @@ public class IngresosAddFragment extends Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.operations_menu, menu);
-        menu.setGroupVisible(R.id.general_group, false); //ocultando los settinggs
-        //menu.removeItem(R.id.drawer_layout);
+        menu.setGroupVisible(R.id.general_group, false); //hidding main items
 
     }
 
@@ -117,7 +116,7 @@ public class IngresosAddFragment extends Fragment
         switch (item.getItemId())
         {
             case R.id.operations_cancel_item:
-                getFragmentManager().popBackStack();//Cerramos el fragment
+                getFragmentManager().popBackStack();//close this fragment
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -134,7 +133,7 @@ public class IngresosAddFragment extends Fragment
             String nombre = et_nombre.getText().toString();
             double monto = Double.parseDouble(et_monto.getText().toString());
 
-            if(tipo.equals("Salario"))
+            if(tipo.equals("Salario")) //tengo que generalizar esto
             {
                 Salario salario = new Salario(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), desc, nombre, monto, new Date());
                 TableIngresos.insert(dbHelper.getWritableDatabase(), salario);
