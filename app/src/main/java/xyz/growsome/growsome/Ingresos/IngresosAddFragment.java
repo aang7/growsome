@@ -152,4 +152,10 @@ public class IngresosAddFragment extends Fragment
         return  true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((Main)getActivity()).setDrawerEnabled(true); //enable drawer again
+    }
+
 }

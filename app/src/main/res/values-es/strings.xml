@@ -3,6 +3,7 @@
 
     <string name="app_name">GrowSome</string>
     <string name="action_add">Agregar</string>
+    <string name="action_backcancel">Cancelar</string>
     <string name="action_delete">Borrar</string>
     <string name="action_edit">Editar</string>
     <string name="action_logout">Cerrar Sesión</string>

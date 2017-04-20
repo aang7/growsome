@@ -40,12 +40,11 @@ public class IngresosReadFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         dbHelper = new DBHelper(getActivity());
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_ingresos_read, container, false);
 
         et_nombre = (EditText) view.findViewById(R.id.editText_nombre);
@@ -59,7 +58,7 @@ public class IngresosReadFragment extends Fragment {
             ;
         else
             Toast.makeText(getActivity(), "Ups algo salió mal!", Toast.LENGTH_SHORT).show();
-        return view;
+        return view; //Inflate the layout for this fragment
     }
 
 

@@ -281,7 +281,7 @@ public class Main extends AppCompatActivity
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame,fragment, "tag");
         ft.addToBackStack("tag");
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         ft.commit();
     }
 
