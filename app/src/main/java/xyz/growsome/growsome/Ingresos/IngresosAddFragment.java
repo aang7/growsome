@@ -1,11 +1,16 @@
 package xyz.growsome.growsome.Ingresos;
 
 
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -41,6 +46,11 @@ public class IngresosAddFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         dbHelper = new DBHelper(getActivity());
+
+        ((Main)getActivity()).setDrawerEnabled(false); //deshabilito drawer
+
+        setHasOptionsMenu(true);//show new items
+        //((Main)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         View view = inflater.inflate(R.layout.fragment_ingresos_add, container, false);
 
@@ -89,6 +99,29 @@ public class IngresosAddFragment extends Fragment
         ((Main)getActivity()).hideFloatingActionButton();
 
         return view;
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.operations_menu, menu);
+        menu.setGroupVisible(R.id.general_group, false); //ocultando los settinggs
+        //menu.removeItem(R.id.drawer_layout);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.operations_cancel_item:
+                getFragmentManager().popBackStack();//Cerramos el fragment
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public boolean saveIngreso()

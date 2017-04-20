@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -40,8 +41,9 @@ import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
 import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.JSONHelper;
 
+
 public class Main extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DrawerLocker {
 
     DrawerLayout drawer;
     Fragment fragment;
@@ -49,6 +51,9 @@ public class Main extends AppCompatActivity
     private TextView navEmail;
     private ImageView navImage;
     private  FloatingActionButton fab;
+    ActionBarDrawerToggle toggle;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class Main extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -102,7 +108,7 @@ public class Main extends AppCompatActivity
 
         /* Navigation Drawer */
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -141,6 +147,7 @@ public class Main extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+
     }
 
     @Override
@@ -149,7 +156,9 @@ public class Main extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
+        Log.d("ENTRO", "Entro aqui");
     }
 
     /* Here we can handle which menu object will represent the action bar */
@@ -166,7 +175,12 @@ public class Main extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Log.d("HOME: ", String.valueOf(id));
+        if (id == android.R.id.home)
+        {
+            Log.d("HOME: ", "HOOOMEEEEEE");
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, Settings.class);
@@ -246,4 +260,13 @@ public class Main extends AppCompatActivity
     public void hideFloatingActionButton() {
         fab.hide();
     };
+
+    /* Intento fallido de agregar el HomeUp item (funcional) */
+    public void setDrawerEnabled(final boolean enabled) {
+        int lockMode = enabled ? DrawerLayout.LOCK_MODE_UNLOCKED :
+                DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
+        drawer.setDrawerLockMode(lockMode);
+        toggle.setDrawerIndicatorEnabled(enabled);
+
+    }
 }
