@@ -64,7 +64,7 @@ public class IngresosAddFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                if(saveIngreso())
+                if(saveIngreso()){
                     Toast.makeText(getActivity(), "Igreso Actualizado", Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();//close this fragment
                 }
