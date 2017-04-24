@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -37,31 +36,26 @@ import java.nio.channels.FileChannel;
 
 import xyz.growsome.growsome.DBTables.TableUsuarios;
 import xyz.growsome.growsome.Gastos.GastosMainFragment;
-import xyz.growsome.growsome.Ingresos.DataExchange;
 import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
 import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.JSONHelper;
-import xyz.growsome.growsome.Utils.ManageFragments;
 import xyz.growsome.growsome.Utils.PrefHelper;
 
 
-public class Main extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DrawerLocker, DataExchange, ManageFragments {
-
+public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+{
     DrawerLayout drawer;
     Fragment fragment;
     private TextView navName;
     private TextView navEmail;
     private ImageView navImage;
-    private  FloatingActionButton fab;
+    private FloatingActionButton fab;
     private String userName = "";
     private String userEmail = "";
     ActionBarDrawerToggle toggle;
     Toolbar toolbar;
 
-    /** Preferences Keys **/
-    public static final String PREF_USERNAME = "UserNav";
-    public static final String PREF_USEREMAIL = "UserEmail";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +98,8 @@ public class Main extends AppCompatActivity
                 }
                 catch(Exception ex)
                 {
-                    Log.d("FAILED",ex.toString());
-                    Snackbar.make(view, "Failed", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Log.d("FAILED", ex.toString());
+                    Snackbar.make(view, "Failed", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
         });
@@ -133,29 +126,30 @@ public class Main extends AppCompatActivity
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 TableUsuarios.insert(db, jsonObj);
 
-                PrefHelper.saveToPrefs(this, PREF_USERNAME, userName);
-                PrefHelper.saveToPrefs(this, PREF_USEREMAIL, userEmail);
+                PrefHelper.saveToPrefs(this, "PREF_USERNAME", userName);
+                PrefHelper.saveToPrefs(this, "PREF_USEREMAIL", userEmail);
             }
             catch (JSONException e)
             {
                 e.printStackTrace();
             }
-        }else {
-            try {
-                userName = (String) PrefHelper.getFromPrefs(this, PREF_USERNAME, new String("User"));
-                userEmail = (String) PrefHelper.getFromPrefs(this, PREF_USEREMAIL, new String("Mail"));
-                navName.setText(userName);
-                navEmail.setText(userEmail);
+        }
+        else
+        {
+            try
+            {
+                //use DB
             }
-            catch (Exception ex){
+            catch (Exception ex)
+            {
                 ex.printStackTrace();
-                Toast.makeText(this, "Ups algo salió mal!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_default, Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
-    public void setup(){
+    public void setup()
+    {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -202,20 +196,14 @@ public class Main extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Log.d("HOME: ", String.valueOf(id));
-        if (id == android.R.id.home)
-        {
-            Log.d("HOME: ", "HOOOMEEEEEE");
-            return true;
-        }
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
             return true;
         }
-        else if(id == R.id.action_logout) {
-
+        else if(id == R.id.action_logout)
+        {
             this.deleteDatabase("growsome.db");
             Intent i = getBaseContext().getPackageManager()
                     .getLaunchIntentForPackage( getBaseContext().getPackageName() );
@@ -223,7 +211,6 @@ public class Main extends AppCompatActivity
             startActivity(i);
             finish();
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -262,52 +249,52 @@ public class Main extends AppCompatActivity
         return true;
     }
 
-    /* Fragment stuff --different to startNewFragment method */
-    public void setFragment(Fragment frgmnt)
+    public void setFragment(Fragment fragment)
     {
-        FragmentManager fragmentManager = getFragmentManager();
-        //Layout a remplazar, instancia del fragmento, tag opcional
-        FragmentTransaction ft = fragmentManager.beginTransaction().replace(R.id.content_frame, frgmnt).disallowAddToBackStack();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
 
-    public void showFloatingActionButton() {
-        fab.show();
-    };
+    public void setFragment(Fragment fragment, Boolean backStack, int transition)
+    {
+        if(backStack)
+        {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame,fragment);
+            ft.addToBackStack(null);
+            ft.setTransition(transition);
+            ft.commit();
+        }
+        else
+        {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.setTransition(transition);
+            ft.commit();
+        }
 
-    public void hideFloatingActionButton() {
-        fab.hide();
-    };
+    }
 
-    /* Intento fallido de agregar el HomeUp item (funcional) */
-    public void setDrawerEnabled(final boolean enabled) {
-        int lockMode = enabled ? DrawerLayout.LOCK_MODE_UNLOCKED :
+    public void showFAB(boolean value)
+    {
+        if(value)
+        {
+            fab.show();
+        }
+        else
+        {
+            fab.hide();
+        }
+    }
+
+    public void showDrawer(boolean value)
+    {
+        int lockMode = value ? DrawerLayout.LOCK_MODE_UNLOCKED :
                 DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
         drawer.setDrawerLockMode(lockMode);
-        toggle.setDrawerIndicatorEnabled(enabled);
-
-    }
-
-    private int list_item_position;
-
-    @Override
-    public void setItemPosition(int position) {
-        list_item_position = position+1;//+1 debido al id de las tablas
-    }
-
-    @Override
-    public int getPositon() {
-        return list_item_position;
-    }
-
-    @Override
-    public void startNewFragment(Fragment fragment) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame,fragment, "tag");
-        ft.addToBackStack("tag");
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-        ft.commit();
+        toggle.setDrawerIndicatorEnabled(value);
     }
 
 }

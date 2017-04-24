@@ -7,16 +7,16 @@
         <item
             android:id="@+id/home_item"
             android:icon="@drawable/ic_home_black"
-            android:title="Home"
+            android:title="@string/title_fragment_home"
             android:checked="true"/>
         <item
             android:id="@+id/ingresos_item"
             android:icon="@drawable/ic_attach_money_black"
-            android:title="Ingresos" />
+            android:title="@string/title_fragment_ingresos" />
         <item
             android:id="@+id/gastos_item"
             android:icon="@drawable/ic_money_off_black"
-            android:title="Gastos" />
+            android:title="@string/title_fragment_gastos" />
     </group>
 
     <group
@@ -25,7 +25,7 @@
             <item
                 android:id="@+id/settings_item"
                 android:icon="@drawable/ic_settings_black_24dp"
-                android:title="Settings" />
+                android:title="@string/title_activity_settings" />
             <item
                 android:id="@+id/about_item"
                 android:icon="@drawable/ic_info_black_24dp"

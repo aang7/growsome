@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Date;
 
 import xyz.growsome.growsome.DBTables.TableIngresos;
 import xyz.growsome.growsome.Main;
@@ -32,16 +35,21 @@ public class IngresosEditFragment extends Fragment {
     EditText et_monto;
     Button btn_save;
 
+    Ingresos Ingreso;
+    long iCodIngreso;
+
     public IngresosEditFragment() {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         dbHelper = new DBHelper(getActivity());
+
+        ((Main)getActivity()).showDrawer(false); //disable drawer
+
+        setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_ingresos_edit, container, false);
 
@@ -57,10 +65,21 @@ public class IngresosEditFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.setGroupVisible(R.id.general_group, false); //hidding main items
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        ((Main)getActivity()).showDrawer(true);
+    }
+
     public void setup()
     {
-
-
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -69,73 +88,66 @@ public class IngresosEditFragment extends Fragment {
                     Toast.makeText(getActivity(), "Igreso Actualizado", Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();//close this fragment
                 }
-                else
-                    Toast.makeText(getActivity(), "ups algo salió mal!", Toast.LENGTH_SHORT).show();
-
-
+                else {
+                    Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        ((Main)getActivity()).setDrawerEnabled(false); //disable drawer
-        ((Main)getActivity()).hideFloatingActionButton();
+        ((Main)getActivity()).showFAB(false);
+        ((Main)getActivity()).showDrawer(false);
     }
-
-
-    public boolean editIngreso()
-    {
-        try{
-            int item_selected = ((DataExchange)getActivity()).getPositon();
-
-            //String tipo = (String) spinner_type.getSelectedItem(); /** falta esta llenarlo **/
-            String desc = et_descripcion.getText().toString();
-            String nombre = et_nombre.getText().toString();
-            double monto = Double.parseDouble(et_monto.getText().toString());
-
-            /** sample**/
-            String SQLupdateCommand = "UPDATE "+ TableIngresos.TABLE_NAME + " SET " + TableIngresos.COL_NOMBRE+ " = " + "'" + nombre + "'"
-                    + " WHERE "  +  TableIngresos.COL_ICOD + " = " + item_selected;
-
-            TableIngresos.insert(dbHelper.getWritableDatabase(), SQLupdateCommand);
-        } catch (Exception ex) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /*    Cursor cursor = dbHelper.selectQuery("UPDATE "+ TableIngresos.TABLE_NAME + "SET " + TableIngresos.COL_NOMBRE + " = "
-                + "WHERE "  +
-                TableIngresos.COL_ICOD + " = " + item_selected);
-*/
 
     public boolean readIngreso()
     {
+        Bundle args = getArguments();
 
-        int item_selected = ((DataExchange)getActivity()).getPositon();
-        Cursor cursor = dbHelper.selectQuery("SELECT * FROM "+ TableIngresos.TABLE_NAME + " WHERE " + TableIngresos.COL_ICOD + " = " + item_selected);
+        iCodIngreso = args.getLong("id");
 
-        /* Reading the cursor*/
-        try {
+        Cursor cursor = dbHelper.selectQuery("SELECT * FROM "+ TableIngresos.TABLE_NAME + " WHERE " + TableIngresos.COL_ICOD + " = " + iCodIngreso);
+
+        try
+        {
             if(cursor.moveToFirst())
             {
-                String tipo = cursor.getString(TableIngresos.COL_ICODTIPO_ID);
-                String desc =  cursor.getString(TableIngresos.COL_DESC_ID);
-                String nombre =  cursor.getString(TableIngresos.COL_NOMBRE_ID);
-                double monto = cursor.getDouble(TableIngresos.COL_MONTO_ID);
 
-                et_nombre.setText(nombre);
-                et_descripcion.setText(desc);
-                et_monto.setText(Double.toString(monto));
-                //spinner_type.setText(tipo);
+                int tipo = cursor.getInt(TableIngresos.COL_ICODTIPO_ID);
 
-                /** falta llenar tipo y categoria en un textView o algo asi **/
+                if(tipo == 1)
+                {
+                    Ingreso = new Salario(
+                            cursor.getInt(TableIngresos.COL_DESC_ID),
+                            cursor.getString(TableIngresos.COL_DESC_ID),
+                            cursor.getString(TableIngresos.COL_NOMBRE_ID),
+                            cursor.getDouble(TableIngresos.COL_MONTO_ID),
+                            new Date());
+                }
+                else if(tipo == 2)
+                {
+                    Ingreso = new Pago(
+                            cursor.getInt(TableIngresos.COL_DESC_ID),
+                            cursor.getString(TableIngresos.COL_DESC_ID),
+                            cursor.getString(TableIngresos.COL_NOMBRE_ID),
+                            cursor.getDouble(TableIngresos.COL_MONTO_ID),
+                            new Date());
+                }
+
+
+                et_nombre.setText(Ingreso.getNombre());
+                et_descripcion.setText(Ingreso.getDesc());
+                et_monto.setText(Double.toString(Ingreso.getMonto()));
+
+                //TODO: Set Tipo y categoria, fix date;
             }
 
-        } catch (Exception e)
+        }
+        catch (Exception ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
             Log.d("CURSOR: ", "ERROR" );
-        } finally {
+        }
+        finally
+        {
             cursor.close();
             dbHelper.close();
         }
@@ -143,10 +155,24 @@ public class IngresosEditFragment extends Fragment {
         return false;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ((Main)getActivity()).setDrawerEnabled(true); //enable drawer again
+    public boolean editIngreso()
+    {
+        try
+        {
+            //String tipo = (String) spinner_type.getSelectedItem(); /** falta esta llenarlo **/
+            String desc = et_descripcion.getText().toString();
+            String nombre = et_nombre.getText().toString();
+            double monto = Double.parseDouble(et_monto.getText().toString());
+
+
+            TableIngresos.update(dbHelper.getWritableDatabase(), Ingreso);
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+
+        return true;
     }
 
 }

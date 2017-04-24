@@ -138,4 +138,31 @@ public class TableIngresos {
 
         return true;
     }
+
+    public static boolean update(SQLiteDatabase db, Ingresos obj)
+    {
+        if(obj instanceof Pago || obj instanceof Salario)
+        {
+            String query = "update "
+                    + TABLE_NAME
+                    + " set "
+                    + COL_ICODTIPO + " = " + obj.getTipoid() + ", "
+                    + COL_NOMBRE + " = " + obj.getNombre() + ", "
+                    + COL_DESC + " = " + obj.getDesc() + ", "
+                    + COL_MONTO + " = " + obj.getMonto() + ", "
+                    + COL_FECHA + " = " + obj.getFecha() + ", "
+                    + COL_DATE + " = datetime('now', 'localtime')"
+                    + " where "
+                    + COL_ICODUSUARIO + " = " + obj.getUserid()
+                    + ";";
+
+            db.execSQL(query);
+        }
+        else
+        {
+            return  false;
+        }
+
+        return true;
+    }
 }

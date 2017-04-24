@@ -26,7 +26,7 @@ public class GastosAddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        ((Main)getActivity()).hideFloatingActionButton();
+        ((Main)getActivity()).showFAB(false);
 
         return inflater.inflate(R.layout.fragment_gastos_add, container, false);
     }

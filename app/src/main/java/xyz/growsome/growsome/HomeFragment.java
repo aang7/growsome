@@ -24,7 +24,7 @@ public class HomeFragment extends Fragment
         // Inflate the layout for this fragment
         getActivity().setTitle(R.string.title_fragment_home);
 
-        ((Main)getActivity()).showFloatingActionButton();
+        ((Main)getActivity()).showFAB(true);
 
         return inflater.inflate(R.layout.fragment_home, container, false);
     }

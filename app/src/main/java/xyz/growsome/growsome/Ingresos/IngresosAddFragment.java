@@ -1,12 +1,9 @@
 package xyz.growsome.growsome.Ingresos;
 
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -47,7 +43,7 @@ public class IngresosAddFragment extends Fragment
     {
         dbHelper = new DBHelper(getActivity());
 
-        ((Main)getActivity()).setDrawerEnabled(false); //disable drawer
+        ((Main)getActivity()).showDrawer(false); //disable drawer
 
         setHasOptionsMenu(true);//show new items
 
@@ -60,18 +56,20 @@ public class IngresosAddFragment extends Fragment
         spinner_type = (Spinner) view.findViewById(R.id.ingresos_tipos);
         spinner_cat = (Spinner) view.findViewById(R.id.ingresos_cat);
 
-        btn_save.setOnClickListener(new View.OnClickListener() {
+        btn_save.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
-                if(saveIngreso()){
+                if(saveIngreso())
+                {
                     Toast.makeText(getActivity(), "Igreso Actualizado", Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();//close this fragment
                 }
                 else
+                {
                     Toast.makeText(getActivity(), "ups algo salió mal!", Toast.LENGTH_SHORT).show();
-
-
+                }
             }
         });
 
@@ -96,7 +94,7 @@ public class IngresosAddFragment extends Fragment
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_type.setAdapter(adapter); //llene los dos tipos
 
-        ((Main)getActivity()).hideFloatingActionButton();
+        ((Main)getActivity()).showFAB(false);
 
         return view;
     }
@@ -105,19 +103,14 @@ public class IngresosAddFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.operations_menu, menu);
         menu.setGroupVisible(R.id.general_group, false); //hidding main items
-
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId())
         {
-            case R.id.operations_cancel_item:
-                getFragmentManager().popBackStack();//close this fragment
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -125,7 +118,6 @@ public class IngresosAddFragment extends Fragment
 
     public boolean saveIngreso()
     {
-
         try
         {
             String tipo = (String) spinner_type.getSelectedItem();
@@ -153,9 +145,10 @@ public class IngresosAddFragment extends Fragment
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
-        ((Main)getActivity()).setDrawerEnabled(true); //enable drawer again
+        ((Main)getActivity()).showDrawer(true); //enable drawer again
     }
 
 }

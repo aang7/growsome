@@ -13,6 +13,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
+    <string name="action_update">Update</string>
     <string name="field_email">Email</string>
     <string name="field_password">Password</string>
     <string name="field_user">User</string>
@@ -21,7 +22,6 @@
     <string name="field_amount">Amount</string>
     <string name="field_desc">Description</string>
     <string name="field_cost">Cost</string>
-    <string name="action_update">Update</string>
 
     <!-- Activity Login -->
     <string name="title_activity_login">Log In</string>
@@ -54,6 +54,7 @@
     <string name="error_invalid_email">The email address is invalid</string>
     <string name="error_invalid_password">The password is too short</string>
     <string name="error_invalid_name">The name is invalid</string>
+    <string name="error_default">Ups! Something went wrong</string>
 
     <!-- Navigation Drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

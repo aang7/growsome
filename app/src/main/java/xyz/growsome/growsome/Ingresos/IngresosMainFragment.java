@@ -6,7 +6,6 @@ import android.app.ListFragment;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,16 +18,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import xyz.growsome.growsome.DBTables.TableIngresos;
-import xyz.growsome.growsome.DBTables.TableTipoIngreso;
-import xyz.growsome.growsome.DBTables.TableUsuarios;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
-import xyz.growsome.growsome.Utils.ManageFragments;
 
 
 /**
@@ -37,6 +32,8 @@ import xyz.growsome.growsome.Utils.ManageFragments;
 public class IngresosMainFragment extends ListFragment {
 
     DBHelper dbHelper;
+    List<String> lIngresosNombre;
+    List<Long> lIngresosId;
 
     public IngresosMainFragment() {
         // Required empty public constructor
@@ -58,8 +55,11 @@ public class IngresosMainFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        ((DataExchange)getActivity()).setItemPosition(position);
-        ((ManageFragments)getActivity()).startNewFragment(new IngresosReadFragment());
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", lIngresosId.get(position));
+        IngresosReadFragment fragment = new IngresosReadFragment();
+        fragment.setArguments(bundle);
+        ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
     }
 
 
@@ -89,13 +89,15 @@ public class IngresosMainFragment extends ListFragment {
 
         Cursor cursor = dbHelper.selectQuery(TableIngresos.SELECT_ALL);
 
-        List<String> ingresos = new ArrayList<>();
+        lIngresosNombre = new ArrayList<>();
+        lIngresosId = new ArrayList<>();
 
         try
         {
             while (cursor.moveToNext())
             {
-                ingresos.add(cursor.getString(TableIngresos.COL_NOMBRE_ID));
+                lIngresosNombre.add(cursor.getString(TableIngresos.COL_NOMBRE_ID));
+                lIngresosId.add(cursor.getLong(TableIngresos.COL_ICOD_ID));
             }
         }
         finally
@@ -106,28 +108,25 @@ public class IngresosMainFragment extends ListFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 inflater.getContext(),
                 android.R.layout.simple_list_item_1,
-                ingresos);
+                lIngresosNombre);
 
         setListAdapter(adapter);
 
-        ((Main)getActivity()).hideFloatingActionButton();
+        ((Main)getActivity()).showFAB(false);
 
-        //registerForContextMenu(getListAdapter());
-
-        return super.onCreateView(inflater, container, savedInstanceState); //para ejemplos rapidos (muestra a vega)
-        //return inflater.inflate(R.layout.fragment_ingresos_main, container, false); //original
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.add_menu, menu);
+        menu.setGroupVisible(R.id.general_group, false); //hidding main items
     }
 
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Item Operations");
         menu.add(0, v.getId(), 0, "Edit Item");
@@ -139,25 +138,28 @@ public class IngresosMainFragment extends ListFragment {
         switch (item.getItemId())
         {
             case R.id.action_add:
-                ((ManageFragments) getActivity()).startNewFragment(new IngresosAddFragment());
+                ((Main) getActivity()).setFragment(new IngresosAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        ((DataExchange)getActivity()).setItemPosition(info.position);
-        if (item.getTitle() == "Edit Item") {
-            ((ManageFragments)getActivity()).startNewFragment(new IngresosEditFragment());
-        } else if (item.getTitle() == "Delete Item") {
-
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", lIngresosId.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position));
+        IngresosEditFragment fragment = new IngresosEditFragment();
+        fragment.setArguments(bundle);
+        if (item.getTitle() == "Edit Item")
+        {
+            ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        }
+        else if (item.getTitle() == "Delete Item")
+        {
+            //TODO: Delete item
             return true;
         }
         return super.onContextItemSelected(item);
     }
-
-
 }

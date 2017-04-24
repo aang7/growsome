@@ -46,7 +46,7 @@ public class GastosMainFragment extends ListFragment {
         //return inflater.inflate(R.layout.fragment_gastos_main, container, false); //original
         setListAdapter(adapter);
 
-        ((Main)getActivity()).hideFloatingActionButton();
+        ((Main)getActivity()).showFAB(false);
 
         return super.onCreateView(inflater, container, savedInstanceState); //para ejemplos rapidos (muestra a vega)
     }
