@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +42,7 @@ import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
 import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.JSONHelper;
 import xyz.growsome.growsome.Utils.ManageFragments;
+import xyz.growsome.growsome.Utils.PrefHelper;
 
 
 public class Main extends AppCompatActivity
@@ -53,20 +54,22 @@ public class Main extends AppCompatActivity
     private TextView navEmail;
     private ImageView navImage;
     private  FloatingActionButton fab;
+    private String userName = "";
+    private String userEmail = "";
     ActionBarDrawerToggle toggle;
+    Toolbar toolbar;
 
-
+    /** Preferences Keys **/
+    public static final String PREF_USERNAME = "UserNav";
+    public static final String PREF_USEREMAIL = "UserEmail";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setup();
 
-        setSupportActionBar(toolbar);
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -108,15 +111,6 @@ public class Main extends AppCompatActivity
             }
         });
 
-        /* Navigation Drawer */
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
         //setting up home_fragment at the beginning
         setFragment(new HomeFragment());
 
@@ -126,29 +120,60 @@ public class Main extends AppCompatActivity
         {
             String jsonBundle = b.getString("webData"); //Referencia a la info traida del intent
 
-            View headerNV = navigationView.getHeaderView(0);
-
-            navName = (TextView) headerNV.findViewById(R.id.nav_name);
-            navEmail = (TextView)  headerNV.findViewById(R.id.nav_email);
-
             //Tomando los valores del JSON
             try
             {
                 JSONHelper jsonParser = new JSONHelper(jsonBundle);
                 JSONObject jsonObj = jsonParser.getJsonObject();
-                String userName = jsonParser.getJsonObject().getString("vchUsuario"); //Tomo el nombre
-                String userEmail = jsonParser.getJsonObject().getString("vchCorreo"); //Tomo el Correo
+                userName = jsonParser.getJsonObject().getString("vchUsuario"); //Tomo el nombre
+                userEmail = jsonParser.getJsonObject().getString("vchCorreo"); //Tomo el Correo
                 navName.setText(userName);
                 navEmail.setText(userEmail);
                 DBHelper dbHelper =  new DBHelper(this);
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 TableUsuarios.insert(db, jsonObj);
+
+                PrefHelper.saveToPrefs(this, PREF_USERNAME, userName);
+                PrefHelper.saveToPrefs(this, PREF_USEREMAIL, userEmail);
             }
             catch (JSONException e)
             {
                 e.printStackTrace();
             }
+        }else {
+            try {
+                userName = (String) PrefHelper.getFromPrefs(this, PREF_USERNAME, new String("User"));
+                userEmail = (String) PrefHelper.getFromPrefs(this, PREF_USEREMAIL, new String("Mail"));
+                navName.setText(userName);
+                navEmail.setText(userEmail);
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+                Toast.makeText(this, "Ups algo salió mal!", Toast.LENGTH_SHORT).show();
+            }
         }
+
+    }
+
+    public void setup(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerNV = navigationView.getHeaderView(0);
+        navName = (TextView) headerNV.findViewById(R.id.nav_name);
+        navEmail = (TextView)  headerNV.findViewById(R.id.nav_email);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        /* Navigation Drawer */
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
     }
 

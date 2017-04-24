@@ -36,5 +36,6 @@
     <string name="title_fragment_home">Inicio</string>
     <string name="title_fragment_ingresos">Ingresos</string>
     <string name="field_cost">Costo</string>
+    <string name="action_update">Actualizar</string>
 </resources>
 

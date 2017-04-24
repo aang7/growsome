@@ -21,6 +21,7 @@
     <string name="field_amount">Amount</string>
     <string name="field_desc">Description</string>
     <string name="field_cost">Cost</string>
+    <string name="action_update">Update</string>
 
     <!-- Activity Login -->
     <string name="title_activity_login">Log In</string>
