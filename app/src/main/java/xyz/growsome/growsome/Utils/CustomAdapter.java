@@ -3,6 +3,7 @@ package xyz.growsome.growsome.Utils;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 //import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class CustomAdapter extends ArrayAdapter<ItemData> {
 
     @Override
     public View getView(int position,  View convertView, ViewGroup parent) {
+
         // Get the data item for this position
         ItemData itemData = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -65,9 +67,11 @@ public class CustomAdapter extends ArrayAdapter<ItemData> {
             result = convertView;
         }
 
-        viewHolder.txtName.setText(itemData.getName());
-        //viewHolder.imgCat.setText(dataModel.getType());
-        viewHolder.txtMonto.setText(itemData.getMonto());
+
+            viewHolder.txtName.setText(itemData.getName());
+            //viewHolder.imgCat.setText(dataModel.getType());
+            viewHolder.txtMonto.setText(itemData.getMonto());
+
 
 
         // Return the completed view to render on screen

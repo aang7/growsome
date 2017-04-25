@@ -13,6 +13,12 @@ public class TableTipoGasto {
     public static final String COL_DESC = "vchDesc";
     public static final String COL_DATE = "dtCreacion";
 
+    public static final int COL_ICOD_ID = 0;
+    public static final int COL_DESC_ID = 1;
+    public static final int COL_DATE_ID = 2;
+
+    public static final String SELECT_ALL = "select * from " + TABLE_NAME;
+
     private static final String DB_CREATE = "create table "
             + TABLE_NAME
             + "("

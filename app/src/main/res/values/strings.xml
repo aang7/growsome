@@ -157,4 +157,6 @@
         <item>Pay</item>
     </string-array>
 
+    <string name="quantity">Quantity</string>
+    <string name="valueupdate">Updated!</string>
 </resources>

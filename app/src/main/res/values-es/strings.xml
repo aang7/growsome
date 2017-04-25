@@ -38,5 +38,7 @@
     <string name="field_cost">Costo</string>
     <string name="action_update">Actualizar</string>
     <string name="error_default">Ups! Algo salió mal</string>
+    <string name="quantity">Cantidad</string>
+    <string name="valueupdate">Actualizado!</string>
 </resources>
 
