@@ -286,7 +286,7 @@ public class IngresosEditFragment extends Fragment implements DatePickerDialog.O
                         desc,
                         nombre,
                         monto,
-                        date);
+                        df.parse(etDate.getText().toString()));
             }
             else if(tipo.equals("Pago"))
             {
@@ -296,7 +296,11 @@ public class IngresosEditFragment extends Fragment implements DatePickerDialog.O
                         desc,
                         nombre,
                         monto,
-                        date);
+                        df.parse(etDate.getText().toString()));
+            }
+            else
+            {
+                return  false;
             }
 
             TableIngresos.update(dbHelper.getWritableDatabase(), Ingreso, iCodIngreso);

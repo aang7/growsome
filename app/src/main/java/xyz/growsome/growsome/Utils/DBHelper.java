@@ -16,7 +16,7 @@ import xyz.growsome.growsome.DBTables.*;
 public class DBHelper extends SQLiteOpenHelper
 {
     private static final String DB_NAME = "growsome.db";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     public DBHelper(Context context)
     {
