@@ -1,6 +1,5 @@
 package xyz.growsome.growsome.Categorias;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -9,18 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.Date;
-
 import xyz.growsome.growsome.DBTables.TableCategorias;
-import xyz.growsome.growsome.DBTables.TableIngresos;
 import xyz.growsome.growsome.DBTables.TableUsuarios;
-import xyz.growsome.growsome.Ingresos.Ingresos;
-import xyz.growsome.growsome.Ingresos.Pago;
-import xyz.growsome.growsome.Ingresos.Salario;
-import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
 
@@ -79,7 +70,7 @@ public class CategoriaAddFragment extends Fragment
             String nombre = etName.getText().toString();
             String desc = etDesc.getText().toString();
 
-            Integer id = TableCategorias.getCategoriaID(dbHelper.getReadableDatabase(), nombre);
+            Integer id = TableCategorias.getCatID(dbHelper.getReadableDatabase(), nombre);
 
             if(id != 0)
             {

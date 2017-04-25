@@ -2,15 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_edit"
-        android:orderInCategory="1"
-        android:title="@string/action_edit"
-        android:icon="@drawable/ic_edit_white_24dp"
-        app:showAsAction="always"
-        />
-    <item
         android:id="@+id/action_cancel"
-        android:orderInCategory="2"
+        android:orderInCategory="1"
         android:title="@string/action_cancel"
         android:icon="@drawable/ic_clear_white_24dp"
         app:showAsAction="always"

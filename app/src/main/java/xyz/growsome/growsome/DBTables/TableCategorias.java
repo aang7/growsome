@@ -81,9 +81,9 @@ public class TableCategorias {
         return true;
     }
 
-    public static int getCategoriaID(SQLiteDatabase db, String name)
+    public static int getCatID(SQLiteDatabase db, String name)
     {
-        Cursor cursor = db.rawQuery("select " + COL_ICOD +" from " + TABLE_NAME
+        Cursor cursor = db.rawQuery("select " + COL_ICOD + " from " + TABLE_NAME
                 + " where " + COL_NOMBRE + " = '" + name + "';", new String[]{});
 
         int count = cursor.getCount();
@@ -95,6 +95,23 @@ public class TableCategorias {
 
         cursor.moveToFirst();
 
-        return  cursor.getInt(COL_ICOD_ID);
+        return  cursor.getInt(0);
+    }
+
+    public static String getCatName(SQLiteDatabase db, long id)
+    {
+        Cursor cursor = db.rawQuery("select " + COL_NOMBRE + " from " + TABLE_NAME
+                + " where " + COL_ICOD + " = " + id + ";", new String[]{});
+
+        int count = cursor.getCount();
+
+        if(count < 1)
+        {
+            return "";
+        }
+
+        cursor.moveToFirst();
+
+        return  cursor.getString(0);
     }
 }

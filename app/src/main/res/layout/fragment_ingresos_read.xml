@@ -7,12 +7,12 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ScrollView
-        android:id="@+id/scroll_ingresos_add"
+        android:id="@+id/scroll_ingresos"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/ingresos_add_form"
+            android:id="@+id/ingresos_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_subject_black_24dp"/>
 
-                <TextView
+                <Spinner
                     android:id="@+id/ingresos_tipos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -60,8 +60,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_folder_black_24dp"/>
 
-                <TextView
-                    android:id="@+id/ingresos_categoria"
+                <Spinner
+                    android:id="@+id/ingresos_cat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -72,15 +72,14 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/editText_nombre"
+                    android:id="@+id/ingresos_field_nombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_face_black_24dp"
+                    android:drawableStart="@drawable/ic_chevron_right_black_24dp"
                     android:drawablePadding="2dp"
                     android:hint="@string/field_name"
-                    android:imeOptions="actionUnspecified"
                     android:inputType="none"
-                    android:editable="false"
+                    android:textIsSelectable="true"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -90,16 +89,15 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/editText_monto"
+                    android:id="@+id/ingresos_field_monto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_attach_money_black"
                     android:drawablePadding="2dp"
                     android:hint="@string/field_amount"
                     android:inputType="none"
-                    android:editable="false"
-                    android:maxLines="1"
-                    />
+                    android:textIsSelectable="true"
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -109,18 +107,32 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/editText_descripcion"
+                    android:id="@+id/ingresos_field_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_description_black_24dp"
                     android:drawablePadding="2dp"
                     android:hint="@string/field_desc"
                     android:inputType="none"
-                    android:editable="false"
-                    android:maxLines="3" />
-
+                    android:textIsSelectable="true"
+                    android:maxLines="6" />
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/ingresos_field_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_date_range_black_24dp"
+                    android:drawablePadding="2dp"
+                    android:hint="@string/field_date"
+                    android:inputType="none"
+                    android:textIsSelectable="true"/>
+
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -1,6 +1,6 @@
 package xyz.growsome.growsome.Ingresos;
 
-
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +32,7 @@ import xyz.growsome.growsome.DBTables.*;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class IngresosAddFragment extends Fragment
+public class IngresosAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener
 {
     DBHelper dbHelper;
     Spinner spinner_type;
@@ -36,7 +40,13 @@ public class IngresosAddFragment extends Fragment
     EditText et_nombre;
     EditText et_descripcion;
     EditText et_monto;
+    EditText etDate;
     Button btn_save;
+    DatePickerDialog datePickerDialog;
+    Date date;
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    Ingresos Ingreso;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -44,17 +54,34 @@ public class IngresosAddFragment extends Fragment
         dbHelper = new DBHelper(getActivity());
 
         ((Main)getActivity()).showDrawer(false);
+        ((Main)getActivity()).showFAB(false);
 
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_ingresos_add, container, false);
 
-        et_nombre = (EditText) view.findViewById(R.id.editText_nombre);
-        et_descripcion = (EditText) view.findViewById(R.id.editText_descripcion);
-        et_monto = (EditText) view.findViewById(R.id.editText_monto);
+        et_nombre = (EditText) view.findViewById(R.id.ingresos_field_nombre);
+        et_descripcion = (EditText) view.findViewById(R.id.ingresos_field_desc);
+        et_monto = (EditText) view.findViewById(R.id.ingresos_field_monto);
+        etDate = (EditText) view.findViewById(R.id.ingresos_field_date);
         btn_save = (Button) view.findViewById(R.id.btn_guardar);
         spinner_type = (Spinner) view.findViewById(R.id.ingresos_tipos);
         spinner_cat = (Spinner) view.findViewById(R.id.ingresos_cat);
+
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+
+        etDate.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog.show();
+            }
+        });
 
         btn_save.setOnClickListener(new View.OnClickListener()
         {
@@ -74,15 +101,23 @@ public class IngresosAddFragment extends Fragment
 
         setup();
 
-        ((Main)getActivity()).showFAB(false);
-
         return view;
     }
 
+    public void onDateSet(DatePicker view, int year, int month, int day)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        date = cal.getTime();
+        etDate.setText(df.format(date));
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.cancel_menu, menu);
         menu.setGroupVisible(R.id.general_group, false); //hidding main items
     }
 
@@ -91,6 +126,9 @@ public class IngresosAddFragment extends Fragment
     {
         switch (item.getItemId())
         {
+            case R.id.action_cancel:
+                getFragmentManager().popBackStack();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -145,21 +183,37 @@ public class IngresosAddFragment extends Fragment
         {
             String tipo = (String) spinner_type.getSelectedItem();
             String cat = (String) spinner_cat.getSelectedItem();
-            int catid = TableCategorias.getCategoriaID(dbHelper.getReadableDatabase(), cat);
+            int catid = TableCategorias.getCatID(dbHelper.getReadableDatabase(), cat);
             String desc = et_descripcion.getText().toString();
             String nombre = et_nombre.getText().toString();
             double monto = Double.parseDouble(et_monto.getText().toString());
 
             if(tipo.equals("Salario")) //tengo que generalizar esto
             {
-                Salario salario = new Salario(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), catid, desc, nombre, monto, new Date());
-                TableIngresos.insert(dbHelper.getWritableDatabase(), salario);
+                Ingreso = new Salario(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        Double.parseDouble(et_monto.getText().toString()),
+                        date);
             }
             else if(tipo.equals("Pago"))
             {
-                Pago pago = new Pago(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), catid, desc, nombre, monto, new Date());
-                TableIngresos.insert(dbHelper.getWritableDatabase(), pago);
+                Ingreso = new Pago(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        monto,
+                        date);
             }
+            else
+            {
+                return  false;
+            }
+
+            TableIngresos.insert(dbHelper.getWritableDatabase(), Ingreso);
         }
         catch (Exception ex)
         {

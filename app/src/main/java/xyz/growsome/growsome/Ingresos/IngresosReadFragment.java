@@ -11,14 +11,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableIngresos;
+import xyz.growsome.growsome.DBTables.TableTipoIngreso;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
@@ -29,14 +34,18 @@ import xyz.growsome.growsome.Utils.DBHelper;
 public class IngresosReadFragment extends Fragment {
 
     DBHelper dbHelper;
-    TextView texv_type;
+    Spinner spinner_type;
     Spinner spinner_cat;
     EditText et_nombre;
     EditText et_descripcion;
     EditText et_monto;
+    EditText etDate;
 
     Ingresos Ingreso;
     long iCodIngreso;
+    List<String> cats;
+    List<String> tipos;
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public IngresosReadFragment() {
         // Required empty public constructor
@@ -48,17 +57,21 @@ public class IngresosReadFragment extends Fragment {
     {
         dbHelper = new DBHelper(getActivity());
 
-        ((Main)getActivity()).showDrawer(false); //disable drawer
+        ((Main)getActivity()).showDrawer(false);
+        ((Main)getActivity()).showFAB(false);
 
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_ingresos_read, container, false);
 
-        et_nombre = (EditText) view.findViewById(R.id.editText_nombre);
-        et_descripcion = (EditText) view.findViewById(R.id.editText_descripcion);
-        et_monto = (EditText) view.findViewById(R.id.editText_monto);
-        texv_type = (TextView) view.findViewById(R.id.ingresos_tipos);
+        et_nombre = (EditText) view.findViewById(R.id.ingresos_field_nombre);
+        et_descripcion = (EditText) view.findViewById(R.id.ingresos_field_desc);
+        et_monto = (EditText) view.findViewById(R.id.ingresos_field_monto);
+        etDate = (EditText) view.findViewById(R.id.ingresos_field_date);
+        spinner_type = (Spinner) view.findViewById(R.id.ingresos_tipos);
         spinner_cat = (Spinner) view.findViewById(R.id.ingresos_cat);
+
+        setup();
 
         if (!readIngreso())
         {
@@ -80,7 +93,6 @@ public class IngresosReadFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-
             case R.id.action_edit:
                 getFragmentManager().popBackStack();
                 Bundle bundle = new Bundle();
@@ -88,6 +100,9 @@ public class IngresosReadFragment extends Fragment {
                 IngresosEditFragment fragment = new IngresosEditFragment();
                 fragment.setArguments(bundle);
                 ((Main) getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                return true;
+            case R.id.action_cancel:
+                getFragmentManager().popBackStack();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -99,6 +114,49 @@ public class IngresosReadFragment extends Fragment {
     {
         super.onDestroy();
         ((Main)getActivity()).showDrawer(true);
+    }
+
+    public boolean setup()
+    {
+        Cursor cursorTipos = dbHelper.selectQuery(TableTipoIngreso.SELECT_ALL);
+        Cursor cursorCats = dbHelper.selectQuery(TableCategorias.SELECT_ALL);
+
+        tipos = new ArrayList<>();
+        cats = new ArrayList<>();
+
+        try
+        {
+            while (cursorTipos.moveToNext())
+            {
+                tipos.add(cursorTipos.getString(TableTipoIngreso.COL_DESC_ID));
+            }
+        }
+        finally
+        {
+            cursorTipos.close();
+        }
+
+        try
+        {
+            while (cursorCats.moveToNext())
+            {
+                cats.add(cursorCats.getString(TableCategorias.COL_NOMBRE_ID));
+            }
+        }
+        finally
+        {
+            cursorCats.close();
+        }
+
+        ArrayAdapter<String> adapterTipos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tipos);
+        adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_type.setAdapter(adapterTipos);
+
+        ArrayAdapter<String> adapterCats = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cats);
+        adapterCats.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_cat.setAdapter(adapterCats);
+
+        return true;
     }
 
     public boolean readIngreso()
@@ -119,13 +177,14 @@ public class IngresosReadFragment extends Fragment {
 
                     if(tipo == 1)
                     {
+
                         Ingreso = new Salario(
                                 cursor.getLong(TableIngresos.COL_ICODUSUARIO_ID),
                                 cursor.getLong(TableIngresos.COL_ICODCAT_ID),
                                 cursor.getString(TableIngresos.COL_DESC_ID),
                                 cursor.getString(TableIngresos.COL_NOMBRE_ID),
                                 cursor.getDouble(TableIngresos.COL_MONTO_ID),
-                                new Date());
+                                df.parse(cursor.getString(TableIngresos.COL_FECHA_ID)));
                     }
                     else if(tipo == 2)
                     {
@@ -135,14 +194,21 @@ public class IngresosReadFragment extends Fragment {
                                 cursor.getString(TableIngresos.COL_DESC_ID),
                                 cursor.getString(TableIngresos.COL_NOMBRE_ID),
                                 cursor.getDouble(TableIngresos.COL_MONTO_ID),
-                                new Date());
+                                df.parse(cursor.getString(TableIngresos.COL_FECHA_ID)));
+                    }
+                    else
+                    {
+                        return  false;
                     }
 
+                    spinner_type.setSelection(tipo - 1);
+                    spinner_type.setEnabled(false);
+                    spinner_cat.setSelection(cats.indexOf(TableCategorias.getCatName(dbHelper.getReadableDatabase(), Ingreso.getCatid())));
+                    spinner_cat.setEnabled(false);
                     et_nombre.setText(Ingreso.getNombre());
                     et_descripcion.setText(Ingreso.getDesc());
                     et_monto.setText(Double.toString(Ingreso.getMonto()));
-
-                    //TODO: Set Tipo y categoria, fix date;
+                    etDate.setText(df.format(Ingreso.getFecha()));
                 }
 
             }

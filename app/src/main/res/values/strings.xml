@@ -14,6 +14,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="action_update">Update</string>
+    <string name="action_cancel">Cancel</string>
     <string name="field_email">Email</string>
     <string name="field_password">Password</string>
     <string name="field_user">User</string>
@@ -22,6 +23,7 @@
     <string name="field_amount">Amount</string>
     <string name="field_desc">Description</string>
     <string name="field_cost">Cost</string>
+    <string name="field_date">Date</string>
 
     <!-- Activity Login -->
     <string name="title_activity_login">Log In</string>

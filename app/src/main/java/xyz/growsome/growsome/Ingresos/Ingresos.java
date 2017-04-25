@@ -1,5 +1,7 @@
 package xyz.growsome.growsome.Ingresos;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -91,8 +93,15 @@ public abstract class Ingresos
         return monto;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFecha()
+    {
+        return this.fecha;
+    }
+
+    public String getFecha(String format)
+    {
+        DateFormat df = new SimpleDateFormat(format);
+        return df.format(this.fecha);
     }
 
 }

@@ -117,10 +117,10 @@ public class TableIngresos {
                     + "(" + obj.getUserid() + ", "
                     + "" + obj.getTipoid() + ", "
                     + "" + obj.getCatid() + ", "
-                    + "'" + obj.getNombre() + "', "
-                    + "'" + obj.getDesc() + "', "
+                    + "'" + obj.getNombre().replaceAll("'", "''") + "', "
+                    + "'" + obj.getDesc().replaceAll("'", "''") + "', "
                     + "" + obj.getMonto() + ", "
-                    + "'" + obj.getFecha() + "', "
+                    + "'" + obj.getFecha("yyyy-MM-dd HH:mm:ss") + "', "
                     + "datetime('now', 'localtime')"
                     + ");";
 
@@ -134,7 +134,7 @@ public class TableIngresos {
         return true;
     }
 
-    public static boolean update(SQLiteDatabase db, Ingresos obj)
+    public static boolean update(SQLiteDatabase db, Ingresos obj, long iCod)
     {
         if(obj instanceof Pago || obj instanceof Salario)
         {
@@ -142,13 +142,14 @@ public class TableIngresos {
                     + TABLE_NAME
                     + " set "
                     + COL_ICODTIPO + " = " + obj.getTipoid() + ", "
-                    + COL_NOMBRE + " = " + obj.getNombre() + ", "
-                    + COL_DESC + " = " + obj.getDesc() + ", "
+                    + COL_ICODCAT + " = " + obj.getCatid() + ", "
+                    + COL_NOMBRE + " = '" + obj.getNombre().replaceAll("'", "''") + "', "
+                    + COL_DESC + " = '" + obj.getDesc().replaceAll("'", "''") + "', "
                     + COL_MONTO + " = " + obj.getMonto() + ", "
-                    + COL_FECHA + " = " + obj.getFecha() + ", "
+                    + COL_FECHA + " = '" + obj.getFecha("yyyy-MM-dd HH:mm:ss") + "', "
                     + COL_DATE + " = datetime('now', 'localtime')"
                     + " where "
-                    + COL_ICODUSUARIO + " = " + obj.getUserid()
+                    + COL_ICOD + " = " + iCod
                     + ";";
 
             db.execSQL(query);
