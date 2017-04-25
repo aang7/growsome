@@ -43,9 +43,9 @@ public class IngresosAddFragment extends Fragment
     {
         dbHelper = new DBHelper(getActivity());
 
-        ((Main)getActivity()).showDrawer(false); //disable drawer
+        ((Main)getActivity()).showDrawer(false);
 
-        setHasOptionsMenu(true);//show new items
+        setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_ingresos_add, container, false);
 
@@ -63,36 +63,16 @@ public class IngresosAddFragment extends Fragment
             {
                 if(saveIngreso())
                 {
-                    Toast.makeText(getActivity(), "Igreso Actualizado", Toast.LENGTH_SHORT).show();
-                    getFragmentManager().popBackStack();//close this fragment
+                    getFragmentManager().popBackStack();
                 }
                 else
                 {
-                    Toast.makeText(getActivity(), "ups algo salió mal!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        Cursor cursor = dbHelper.selectQuery(TableTipoIngreso.SELECT_ALL);
-
-        List<String> tipos = new ArrayList<>(); //solo son 2 tipos
-
-        try
-        {
-            while (cursor.moveToNext())
-            {
-                tipos.add(cursor.getString(TableTipoIngreso.COL_DESC_ID)); //Aqui ando
-            }
-        }
-
-        finally
-        {
-            cursor.close();
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tipos);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_type.setAdapter(adapter); //llene los dos tipos
+        setup();
 
         ((Main)getActivity()).showFAB(false);
 
@@ -116,23 +96,68 @@ public class IngresosAddFragment extends Fragment
         }
     }
 
+    public boolean setup()
+    {
+        Cursor cursorTipos = dbHelper.selectQuery(TableTipoIngreso.SELECT_ALL);
+        Cursor cursorCats = dbHelper.selectQuery(TableCategorias.SELECT_ALL);
+
+        List<String> tipos = new ArrayList<>();
+        List<String> cats = new ArrayList<>();
+
+        try
+        {
+            while (cursorTipos.moveToNext())
+            {
+                tipos.add(cursorTipos.getString(TableTipoIngreso.COL_DESC_ID));
+            }
+        }
+        finally
+        {
+            cursorTipos.close();
+        }
+
+        try
+        {
+            while (cursorCats.moveToNext())
+            {
+                cats.add(cursorCats.getString(TableCategorias.COL_NOMBRE_ID));
+            }
+        }
+        finally
+        {
+            cursorCats.close();
+        }
+
+        ArrayAdapter<String> adapterTipos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tipos);
+        adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_type.setAdapter(adapterTipos);
+
+        ArrayAdapter<String> adapterCats = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cats);
+        adapterCats.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_cat.setAdapter(adapterCats);
+
+        return true;
+    }
+
     public boolean saveIngreso()
     {
         try
         {
             String tipo = (String) spinner_type.getSelectedItem();
+            String cat = (String) spinner_cat.getSelectedItem();
+            int catid = TableCategorias.getCategoriaID(dbHelper.getReadableDatabase(), cat);
             String desc = et_descripcion.getText().toString();
             String nombre = et_nombre.getText().toString();
             double monto = Double.parseDouble(et_monto.getText().toString());
 
             if(tipo.equals("Salario")) //tengo que generalizar esto
             {
-                Salario salario = new Salario(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), desc, nombre, monto, new Date());
+                Salario salario = new Salario(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), catid, desc, nombre, monto, new Date());
                 TableIngresos.insert(dbHelper.getWritableDatabase(), salario);
             }
             else if(tipo.equals("Pago"))
             {
-                Pago pago = new Pago(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), desc, nombre, monto, new Date());
+                Pago pago = new Pago(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), catid, desc, nombre, monto, new Date());
                 TableIngresos.insert(dbHelper.getWritableDatabase(), pago);
             }
         }
@@ -150,5 +175,4 @@ public class IngresosAddFragment extends Fragment
         super.onDestroy();
         ((Main)getActivity()).showDrawer(true); //enable drawer again
     }
-
 }

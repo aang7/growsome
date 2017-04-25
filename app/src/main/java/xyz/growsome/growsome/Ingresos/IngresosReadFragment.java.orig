@@ -87,8 +87,12 @@ public class IngresosReadFragment extends Fragment {
                 bundle.putLong("id", iCodIngreso);
                 IngresosEditFragment fragment = new IngresosEditFragment();
                 fragment.setArguments(bundle);
+<<<<<<< Updated upstream
                 ((Main) getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+=======
+                ((Main) getActivity()).setFragment(fragment);
                 return true;
+>>>>>>> Stashed changes
             default:
                 return super.onOptionsItemSelected(item);
         }

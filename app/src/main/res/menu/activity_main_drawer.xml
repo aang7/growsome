@@ -17,6 +17,10 @@
             android:id="@+id/gastos_item"
             android:icon="@drawable/ic_money_off_black"
             android:title="@string/title_fragment_gastos" />
+        <item
+            android:id="@+id/categorias_item"
+            android:icon="@drawable/ic_folder_black_24dp"
+            android:title="@string/title_fragment_categorias" />
     </group>
 
     <group

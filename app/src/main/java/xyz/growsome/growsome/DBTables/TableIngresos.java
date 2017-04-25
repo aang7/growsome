@@ -16,6 +16,7 @@ public class TableIngresos {
     public static final String COL_ICOD = "iCodIngreso";
     public static final String COL_ICODUSUARIO = "iCodUsuario";
     public static final String COL_ICODTIPO = "iCodTipoIngreso";
+    public static final String COL_ICODCAT = "iCodCategoria";
     public static final String COL_NOMBRE = "vchNombre";
     public static final String COL_DESC = "vchDesc";
     public static final String COL_MONTO = "fltMonto";
@@ -25,11 +26,12 @@ public class TableIngresos {
     public static final int COL_ICOD_ID = 0;
     public static final int COL_ICODUSUARIO_ID = 1;
     public static final int COL_ICODTIPO_ID = 2;
-    public static final int COL_NOMBRE_ID = 3;
-    public static final int COL_DESC_ID = 4;
-    public static final int COL_MONTO_ID = 5;
-    public static final int COL_FECHA_ID = 6;
-    public static final int COL_DATE_ID = 7;
+    public static final int COL_ICODCAT_ID = 3;
+    public static final int COL_NOMBRE_ID = 4;
+    public static final int COL_DESC_ID = 5;
+    public static final int COL_MONTO_ID = 6;
+    public static final int COL_FECHA_ID = 7;
+    public static final int COL_DATE_ID = 8;
 
     private static final String DB_CREATE = "create table "
             + TABLE_NAME
@@ -37,6 +39,7 @@ public class TableIngresos {
             + COL_ICOD + " integer not null primary key autoincrement, "
             + COL_ICODUSUARIO + " integer not null, "
             + COL_ICODTIPO + " integer not null, "
+            + COL_ICODCAT + " integer not null, "
             + COL_NOMBRE + " text not null, "
             + COL_DESC + " text, "
             + COL_MONTO + " real not null, "
@@ -66,6 +69,7 @@ public class TableIngresos {
                     + "("
                     + COL_ICODUSUARIO + ", "
                     + COL_ICODTIPO + ", "
+                    + COL_ICODCAT + ", "
                     + COL_NOMBRE + ", "
                     + COL_DESC + ", "
                     + COL_MONTO + ", "
@@ -75,6 +79,7 @@ public class TableIngresos {
                     + " values "
                     + "(" + obj.getString(COL_ICODUSUARIO) + ", "
                     + "" + obj.getString(COL_ICODTIPO) + ", "
+                    + "" + obj.getString(COL_ICODCAT) + ", "
                     + "'" + obj.getString(COL_NOMBRE) + "', "
                     + "'" + obj.getString(COL_DESC) + "', "
                     + "" + obj.getString(COL_MONTO) + ", "
@@ -101,6 +106,7 @@ public class TableIngresos {
                     + "("
                     + COL_ICODUSUARIO + ", "
                     + COL_ICODTIPO + ", "
+                    + COL_ICODCAT + ", "
                     + COL_NOMBRE + ", "
                     + COL_DESC + ", "
                     + COL_MONTO + ", "
@@ -110,6 +116,7 @@ public class TableIngresos {
                     + " values "
                     + "(" + obj.getUserid() + ", "
                     + "" + obj.getTipoid() + ", "
+                    + "" + obj.getCatid() + ", "
                     + "'" + obj.getNombre() + "', "
                     + "'" + obj.getDesc() + "', "
                     + "" + obj.getMonto() + ", "
@@ -122,18 +129,6 @@ public class TableIngresos {
         else
         {
             return  false;
-        }
-
-        return true;
-    }
-
-    public static boolean insert(SQLiteDatabase db, String SQLCommand){
-        try
-        {
-            db.execSQL(SQLCommand);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
         }
 
         return true;

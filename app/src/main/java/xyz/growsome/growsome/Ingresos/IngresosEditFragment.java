@@ -10,14 +10,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableIngresos;
+import xyz.growsome.growsome.DBTables.TableTipoIngreso;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
@@ -57,7 +62,7 @@ public class IngresosEditFragment extends Fragment {
         et_descripcion = (EditText) view.findViewById(R.id.editText_descripcion);
         et_monto = (EditText) view.findViewById(R.id.editText_monto);
         btn_save = (Button) view.findViewById(R.id.btn_guardar);
-        //spinner_type = (Spinner) view.findViewById(R.id.ingresos_tipos);
+        spinner_type = (Spinner) view.findViewById(R.id.ingresos_tipos);
         spinner_cat = (Spinner) view.findViewById(R.id.ingresos_cat);
 
         setup();
@@ -80,15 +85,55 @@ public class IngresosEditFragment extends Fragment {
 
     public void setup()
     {
+        Cursor cursorTipos = dbHelper.selectQuery(TableTipoIngreso.SELECT_ALL);
+        Cursor cursorCats = dbHelper.selectQuery(TableCategorias.SELECT_ALL);
+
+        List<String> tipos = new ArrayList<>();
+        List<String> cats = new ArrayList<>();
+
+        try
+        {
+            while (cursorTipos.moveToNext())
+            {
+                tipos.add(cursorTipos.getString(TableTipoIngreso.COL_DESC_ID));
+            }
+        }
+        finally
+        {
+            cursorTipos.close();
+        }
+
+        try
+        {
+            while (cursorCats.moveToNext())
+            {
+                cats.add(cursorCats.getString(TableCategorias.COL_NOMBRE_ID));
+            }
+        }
+        finally
+        {
+            cursorCats.close();
+        }
+
+        ArrayAdapter<String> adapterTipos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tipos);
+        adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_type.setAdapter(adapterTipos);
+
+        ArrayAdapter<String> adapterCats = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cats);
+        adapterCats.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_cat.setAdapter(adapterCats);
+
+
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                if(editIngreso()) {
-                    Toast.makeText(getActivity(), "Igreso Actualizado", Toast.LENGTH_SHORT).show();
+                if(editIngreso())
+                {
                     getFragmentManager().popBackStack();//close this fragment
                 }
-                else {
+                else
+                {
                     Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -116,7 +161,8 @@ public class IngresosEditFragment extends Fragment {
                 if(tipo == 1)
                 {
                     Ingreso = new Salario(
-                            cursor.getInt(TableIngresos.COL_DESC_ID),
+                            cursor.getLong(TableIngresos.COL_DESC_ID),
+                            cursor.getLong(TableIngresos.COL_ICODCAT_ID),
                             cursor.getString(TableIngresos.COL_DESC_ID),
                             cursor.getString(TableIngresos.COL_NOMBRE_ID),
                             cursor.getDouble(TableIngresos.COL_MONTO_ID),
@@ -125,13 +171,13 @@ public class IngresosEditFragment extends Fragment {
                 else if(tipo == 2)
                 {
                     Ingreso = new Pago(
-                            cursor.getInt(TableIngresos.COL_DESC_ID),
+                            cursor.getLong(TableIngresos.COL_ICODUSUARIO_ID),
+                            cursor.getLong(TableIngresos.COL_ICODCAT_ID),
                             cursor.getString(TableIngresos.COL_DESC_ID),
                             cursor.getString(TableIngresos.COL_NOMBRE_ID),
                             cursor.getDouble(TableIngresos.COL_MONTO_ID),
                             new Date());
                 }
-
 
                 et_nombre.setText(Ingreso.getNombre());
                 et_descripcion.setText(Ingreso.getDesc());
@@ -160,10 +206,9 @@ public class IngresosEditFragment extends Fragment {
         try
         {
             //String tipo = (String) spinner_type.getSelectedItem(); /** falta esta llenarlo **/
-            String desc = et_descripcion.getText().toString();
-            String nombre = et_nombre.getText().toString();
-            double monto = Double.parseDouble(et_monto.getText().toString());
-
+            Ingreso.setDesc(et_descripcion.getText().toString());
+            Ingreso.setNombre(et_nombre.getText().toString());
+            Ingreso.setMonto(Double.parseDouble(et_monto.getText().toString()));
 
             TableIngresos.update(dbHelper.getWritableDatabase(), Ingreso);
         }

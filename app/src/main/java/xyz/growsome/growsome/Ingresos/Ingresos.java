@@ -8,25 +8,32 @@ import java.util.Date;
 
 public abstract class Ingresos
 {
-    private int userid;
-    private int tipoid;
+    private long userid;
+    private long tipoid;
+    private long catid;
     private String desc;
     private String nombre;
     private double monto;
     private Date fecha;
 
-    public Ingresos(int userid, String desc, String nombre, double monto, Date fecha)
+    public Ingresos(long userid, long catid, String desc, String nombre, double monto, Date fecha)
     {
         this.userid = userid;
+        this.catid = catid;
         this.desc = desc;
         this.nombre = nombre;
         this.monto = monto;
         this.fecha = fecha;
     }
 
-    public void setUserid(int userid)
+    public void setUserid(long userid)
     {
         this.userid = userid;
+    }
+
+    public void setCatid(long catid)
+    {
+        this.catid = catid;
     }
 
     public void setTipoid(int tipoid)
@@ -54,12 +61,17 @@ public abstract class Ingresos
         this.fecha = fecha;
     }
 
-    public int getUserid()
+    public long getUserid()
     {
         return userid;
     }
 
-    public int getTipoid()
+    public long getCatid()
+    {
+        return catid;
+    }
+
+    public long getTipoid()
     {
         return tipoid;
     }

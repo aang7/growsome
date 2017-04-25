@@ -45,6 +45,9 @@
     <string name="title_fragment_ingresos">Incomes</string>
     <string name="ingresos_type">Type of income</string>
 
+    <!-- Fragments Categorias -->
+    <string name="title_fragment_categorias">Categories</string>
+
     <!-- Errors -->
     <string name="error_bad_url">Url broken</string>
     <string name="error_no_data">No data from server</string>
@@ -55,6 +58,7 @@
     <string name="error_invalid_password">The password is too short</string>
     <string name="error_invalid_name">The name is invalid</string>
     <string name="error_default">Ups! Something went wrong</string>
+    <string name="error_repeated_category">Category name already used</string>
 
     <!-- Navigation Drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

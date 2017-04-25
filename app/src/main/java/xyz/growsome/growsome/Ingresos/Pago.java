@@ -8,10 +8,9 @@ import java.util.Date;
 
 public class Pago extends Ingresos {
 
-
-    public Pago(int userid, String desc, String nombre, double monto, Date fecha)
+    public Pago(long userid, long catid, String desc, String nombre, double monto, Date fecha)
     {
-        super(userid, desc, nombre, monto, fecha);
+        super(userid, catid, desc, nombre, monto, fecha);
         setTipoid(2);
     }
 }
