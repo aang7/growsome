@@ -6,6 +6,7 @@ import android.app.ListFragment;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,17 +24,19 @@ import java.util.List;
 import xyz.growsome.growsome.DBTables.TableIngresos;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
+import xyz.growsome.growsome.Utils.CustomAdapter;
 import xyz.growsome.growsome.Utils.DBHelper;
+import xyz.growsome.growsome.Utils.ItemData;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class IngresosMainFragment extends ListFragment {
+public class IngresosMainFragment extends Fragment {
 
     DBHelper dbHelper;
-    List<String> lIngresosNombre;
-    List<Long> lIngresosId;
+    ArrayList<ItemData> lIngresositems;
+    ListView listView;
 
     public IngresosMainFragment() {
         // Required empty public constructor
@@ -42,62 +45,45 @@ public class IngresosMainFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true); //to display additional menu items
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        registerForContextMenu(getListView());
 
     }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", lIngresosId.get(position));
-        IngresosReadFragment fragment = new IngresosReadFragment();
-        fragment.setArguments(bundle);
-        ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-    }
-
 
     /* Esta cosa es del List Fragment*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         getActivity().setTitle(R.string.title_fragment_ingresos);
 
-
-        /*Se muestra como generar un objeto pago, se inserta con la clase tabla correspondiente,
-        * se usa el dbhelper para traer el cursor con la informacion, se recorre y se agrega la
-        * info a una lista que alimenta el array adapter para mostrar la info.
-        * este pedo se reinsertara cada que se cree el fragmento*/
+        View view = inflater.inflate(R.layout.fragment_ingresos_main, container, false);
 
         dbHelper = new DBHelper(getActivity());
 
-        /*Pago p = new Pago(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), "TEST PAGO", "TEST",
-                21.3, new Date());
-
-        Salario s = new Salario(TableUsuarios.getUserID(dbHelper.getReadableDatabase()), "TEST Salario", "TEST2",
-                23.3, new Date());
-
-        TableIngresos.insert(dbHelper.getWritableDatabase(), s);
-        TableIngresos.insert(dbHelper.getWritableDatabase(), p);*/
 
         Cursor cursor = dbHelper.selectQuery(TableIngresos.SELECT_ALL);
 
-        lIngresosNombre = new ArrayList<>();
-        lIngresosId = new ArrayList<>();
+        lIngresositems = new ArrayList<>();
+
+        listView=(ListView)view.findViewById(R.id.list);
+
 
         try
         {
             while (cursor.moveToNext())
             {
-                lIngresosNombre.add(cursor.getString(TableIngresos.COL_NOMBRE_ID));
-                lIngresosId.add(cursor.getLong(TableIngresos.COL_ICOD_ID));
+                ItemData itemData = new ItemData(
+                        cursor.getLong(TableIngresos.COL_ICOD_ID),
+                        cursor.getString(TableIngresos.COL_NOMBRE_ID),
+                        cursor.getString(TableIngresos.COL_MONTO_ID),
+                        cursor.getString(TableIngresos.COL_NOMBRE_ID));
+
+                lIngresositems.add(itemData);
             }
         }
         finally
@@ -105,16 +91,29 @@ public class IngresosMainFragment extends ListFragment {
             cursor.close();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                inflater.getContext(),
-                android.R.layout.simple_list_item_1,
-                lIngresosNombre);
+        CustomAdapter adapter = new CustomAdapter(lIngresositems,inflater.getContext());
 
-        setListAdapter(adapter);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                ItemData itemData = lIngresositems.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putLong("id", itemData.getId());
+                IngresosReadFragment fragment = new IngresosReadFragment();
+                fragment.setArguments(bundle);
+                ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
+        });
 
         ((Main)getActivity()).showFAB(false);
+        registerForContextMenu(listView);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
+        //return inflater.inflate(R.layout.fragment_ingresos_main, container, false); //original
     }
 
     @Override
@@ -148,7 +147,7 @@ public class IngresosMainFragment extends ListFragment {
     public boolean onContextItemSelected(MenuItem item)
     {
         Bundle bundle = new Bundle();
-        bundle.putLong("id", lIngresosId.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position));
+        bundle.putLong("id", lIngresositems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId());
         IngresosEditFragment fragment = new IngresosEditFragment();
         fragment.setArguments(bundle);
         if (item.getTitle() == "Edit Item")

@@ -80,12 +80,14 @@ public class IngresosReadFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
+
             case R.id.action_edit:
+                getFragmentManager().popBackStack();
                 Bundle bundle = new Bundle();
                 bundle.putLong("id", iCodIngreso);
                 IngresosEditFragment fragment = new IngresosEditFragment();
                 fragment.setArguments(bundle);
-                ((Main) getActivity()).setFragment(fragment);
+                ((Main) getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             default:
                 return super.onOptionsItemSelected(item);
         }
