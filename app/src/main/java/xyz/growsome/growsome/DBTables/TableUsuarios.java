@@ -54,6 +54,21 @@ public class TableUsuarios {
         return  cursor.getInt(COL_ICOD_ID);
     }
 
+    public static String[] getUserData (SQLiteDatabase db)
+    {
+        int id = getUserID(db);
+
+        Cursor cursor = db.rawQuery("select "
+                + COL_NOMBRE + ", "
+                + COL_CORREO
+                + " from " + TABLE_NAME
+                + " where " + COL_ICOD  + " = " + id + ";", new String[]{});
+
+        cursor.moveToFirst();
+
+        return new String[] {cursor.getString(0), cursor.getString(1)};
+    }
+
     public static boolean insert(SQLiteDatabase db, JSONObject obj)
     {
         try
