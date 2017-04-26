@@ -24,6 +24,7 @@
     <string name="field_desc">Description</string>
     <string name="field_cost">Cost</string>
     <string name="field_date">Date</string>
+    <string name="field_color">Color</string>
 
     <!-- Activity Login -->
     <string name="title_activity_login">Log In</string>

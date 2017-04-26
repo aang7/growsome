@@ -8,12 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableUsuarios;
+import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +29,9 @@ public class CategoriaAddFragment extends Fragment
     EditText etName;
     EditText etDesc;
     Button btnSave;
+    ColorPicker colorPicker;
+    View colorButton;
+    ImageView colorImage;
 
     public CategoriaAddFragment() {
         // Required empty public constructor
@@ -37,14 +44,16 @@ public class CategoriaAddFragment extends Fragment
         dbHelper = new DBHelper(getActivity());
 
         //((Main)getActivity()).showDrawer(false);
+        ((Main)getActivity()).showFAB(false);
 
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_categoria_add, container, false);
 
-        etName = (EditText) view.findViewById(R.id.categorias_add_field_name);
-        etDesc = (EditText) view.findViewById(R.id.categorias_add_field_desc);
+        etName = (EditText) view.findViewById(R.id.categorias_field_name);
+        etDesc = (EditText) view.findViewById(R.id.categorias_field_desc);
         btnSave = (Button) view.findViewById(R.id.categorias_add_btnSave);
+        colorImage = (ImageView)  view.findViewById(R.id.categorias_image);
 
         btnSave.setOnClickListener(new View.OnClickListener()
         {
@@ -55,6 +64,27 @@ public class CategoriaAddFragment extends Fragment
                 {
                     getFragmentManager().popBackStack();
                 }
+            }
+        });
+
+        colorButton = view.findViewById(R.id.categorias_field_color);
+
+        colorPicker = new ColorPicker(getActivity(), 255, 64, 67);
+
+        colorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                colorPicker.show();
+            }
+        });
+
+        colorPicker.setCallback(new ColorPickerCallback() {
+            @Override
+            public void onColorChosen(int color)
+            {
+                colorImage.setBackgroundColor(color);
+                colorPicker.hide();
             }
         });
 
