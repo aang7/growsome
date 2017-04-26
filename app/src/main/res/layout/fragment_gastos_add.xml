@@ -17,22 +17,22 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/InputLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/gastos_type"
-                style="@style/InputLabel" />
+                android:text="@string/gastos_type" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="4dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="16dp"
+                android:paddingLeft="4dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_subject_black_24dp"/>
+                    android:background="@drawable/ic_subject_black_24dp" />
 
                 <Spinner
                     android:id="@+id/gastos_tipos"
@@ -41,22 +41,22 @@
             </LinearLayout>
 
             <TextView
+                style="@style/InputLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/field_category"
-                style="@style/InputLabel" />
+                android:text="@string/field_category" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="4dp"
-                android:paddingBottom="4dp">
+                android:paddingBottom="4dp"
+                android:paddingLeft="4dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_folder_black_24dp"/>
+                    android:background="@drawable/ic_folder_black_24dp" />
 
                 <Spinner
                     android:id="@+id/gastos_cat"
@@ -72,8 +72,8 @@
                     android:id="@+id/gastos_field_nombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_face_black_24dp"
                     android:drawablePadding="2dp"
+                    android:drawableStart="@drawable/ic_chevron_right_black_24dp"
                     android:hint="@string/field_name"
                     android:imeOptions="actionUnspecified"
                     android:inputType="text"
@@ -89,8 +89,8 @@
                     android:id="@+id/gastos_field_costo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_attach_money_black"
                     android:drawablePadding="2dp"
+                    android:drawableStart="@drawable/ic_attach_money_black"
                     android:hint="@string/field_cost"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
@@ -105,9 +105,8 @@
                     android:id="@+id/gastos_cantidad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_expand_less_black_24dp"
-                    android:drawableEnd="@drawable/ic_expand_more_black_24dp"
                     android:drawablePadding="2dp"
+                    android:drawableStart="@drawable/ic_show_chart_black_24dp"
                     android:hint="@string/quantity"
                     android:imeOptions="actionUnspecified"
                     android:inputType="numberSigned"
@@ -123,8 +122,8 @@
                     android:id="@+id/gastos_field_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_description_black_24dp"
                     android:drawablePadding="2dp"
+                    android:drawableStart="@drawable/ic_description_black_24dp"
                     android:hint="@string/field_desc"
                     android:inputType="text"
                     android:maxLines="3" />
@@ -139,10 +138,10 @@
                     android:id="@+id/gastos_field_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_date_range_black_24dp"
                     android:drawablePadding="2dp"
-                    android:hint="@string/field_date"
-                    android:focusable="false"/>
+                    android:drawableStart="@drawable/ic_date_range_black_24dp"
+                    android:focusable="false"
+                    android:hint="@string/field_date" />
 
             </android.support.design.widget.TextInputLayout>
 

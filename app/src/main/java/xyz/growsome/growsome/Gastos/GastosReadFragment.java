@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -79,6 +80,18 @@ public class GastosReadFragment extends Fragment {
         spinner_type = (Spinner) view.findViewById(R.id.gastos_tipos);
         spinner_cat = (Spinner) view.findViewById(R.id.gastos_cat);
         et_cantidad = (EditText) view.findViewById(R.id.gastos_cantidad);
+
+        spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                setCantidad(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         setup();
 
@@ -165,7 +178,23 @@ public class GastosReadFragment extends Fragment {
         adapterCats.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_cat.setAdapter(adapterCats);
 
+        setCantidad(spinner_type.getSelectedItemPosition());
+
         return true;
+    }
+
+    public void setCantidad(int position)
+    {
+        String tipo = (String) spinner_type.getItemAtPosition(position);
+
+        if(tipo.equals("Servicio"))
+        {
+            et_cantidad.setEnabled(false);
+        }
+        else if(tipo.equals("Producto"))
+        {
+            et_cantidad.setEnabled(true);
+        }
     }
 
     public boolean readGasto()
@@ -184,9 +213,20 @@ public class GastosReadFragment extends Fragment {
                 {
                     int tipo = cursor.getInt(TableGastos.COL_ICODTIPO_ID);
 
-                    if(tipo == 2) /* Hay que cambiar los indices de tipos Nose porque rayos aqui cambia*/
+                    if(tipo == 1)
                     {
+                        Gasto = new Servicio(
+                                cursor.getInt(TableGastos.COL_ICODUSUARIO_ID),
+                                cursor.getLong(TableGastos.COL_ICODCAT_ID),
+                                cursor.getString(TableGastos.COL_DESC_ID),
+                                cursor.getString(TableGastos.COL_NOMBRE_ID),
+                                cursor.getDouble(TableGastos.COL_COSTO_ID),
+                                df.parse(cursor.getString(TableGastos.COL_FECHA_ID)));
 
+                        et_cantidad.setText("NA");
+                    }
+                    else if(tipo == 2)
+                    {
                         Gasto = new Producto(
                                 cursor.getLong(TableGastos.COL_ICODUSUARIO_ID),
                                 cursor.getLong(TableGastos.COL_ICODCAT_ID),
@@ -195,17 +235,8 @@ public class GastosReadFragment extends Fragment {
                                 cursor.getDouble(TableGastos.COL_COSTO_ID),
                                 cursor.getInt(TableGastos.COL_CANT_ID),
                                 df.parse(cursor.getString(TableGastos.COL_FECHA_ID)));
-                    }
-                    else if(tipo == 0)
-                    {
-                        Gasto = new Servicio(
-                                cursor.getInt(TableGastos.COL_ICODUSUARIO_ID),
-                                cursor.getLong(TableGastos.COL_ICODCAT_ID),
-                                cursor.getString(TableGastos.COL_DESC_ID),
-                                cursor.getString(TableGastos.COL_NOMBRE_ID),
-                                cursor.getDouble(TableGastos.COL_COSTO_ID),
-                                cursor.getInt(TableGastos.COL_CANT_ID),
-                                df.parse(cursor.getString(TableGastos.COL_FECHA_ID)));
+
+                        et_cantidad.setText(Integer.toString(Gasto.getCantidad()));
                     }
                     else
                     {
@@ -220,7 +251,6 @@ public class GastosReadFragment extends Fragment {
                     et_descripcion.setText(Gasto.getDesc());
                     et_costo.setText(Double.toString(Gasto.getCosto()));
                     etDate.setText(df.format(Gasto.getFecha()));
-                    et_cantidad.setText(Integer.toString(Gasto.getCantidad()));
                 }
 
             }

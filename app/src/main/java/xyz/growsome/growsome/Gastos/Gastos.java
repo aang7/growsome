@@ -19,16 +19,6 @@ public abstract class Gastos {
     private Date fecha;
     private int cantidad;
 
-    public Gastos(long userid, long catid, String desc, String nombre, double costo, Date fecha)
-    {
-        this.userid = userid;
-        this.catid = catid;
-        this.desc = desc;
-        this.nombre = nombre;
-        this.costo = costo;
-        this.fecha = fecha;
-    }
-
     public Gastos(long userid, long catid, String desc, String nombre, double costo, int cantidad, Date fecha)
     {
         this.userid = userid;
@@ -102,10 +92,8 @@ public abstract class Gastos {
         this.fecha = fecha;
     }
 
-    public int getCantidad() {
-        if (cantidad <= 0)
-            cantidad = 1;
-
+    public int getCantidad()
+    {
         return cantidad;
     }
 

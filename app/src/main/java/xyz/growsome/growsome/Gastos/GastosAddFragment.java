@@ -5,12 +5,14 @@ import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -114,6 +116,18 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
             }
         });
 
+        spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                setCantidad(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         setup();
 
         return view;
@@ -159,8 +173,11 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
         adapterCats.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_cat.setAdapter(adapterCats);
 
+        setCantidad(spinner_type.getSelectedItemPosition());
+
         return true;
     }
+
     public boolean saveGasto()
     {
         try
@@ -171,10 +188,12 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
             String desc = et_descripcion.getText().toString();
             String nombre = et_nombre.getText().toString();
             double costo = Double.parseDouble(et_costo.getText().toString());
-            int cantidad = Integer.parseInt(et_cantidad.getText().toString());
 
-            if(tipo.equals("Producto")) //tengo que generalizar esto
+            if(tipo.equals("Producto") && et_cantidad.isEnabled())
             {
+
+                int cantidad = Integer.parseInt(et_cantidad.getText().toString());
+
                 Gasto = new Producto(
                         TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
                         catid,
@@ -203,12 +222,26 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
         }
         catch (Exception ex)
         {
+            Log.d("Error", ex.toString());
             return false;
         }
 
         return  true;
     }
 
+    public void setCantidad(int position)
+    {
+        String tipo = (String) spinner_type.getItemAtPosition(position);
+
+        if(tipo.equals("Servicio"))
+        {
+            et_cantidad.setEnabled(false);
+        }
+        else if(tipo.equals("Producto"))
+        {
+            et_cantidad.setEnabled(true);
+        }
+    }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = Calendar.getInstance();

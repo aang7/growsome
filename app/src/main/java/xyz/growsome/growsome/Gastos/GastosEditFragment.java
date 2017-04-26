@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -105,6 +106,18 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
             public void onClick(View v) {
                 datePickerDialog.show();
             }
+        });
+
+        spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                setCantidad(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         setup();
@@ -195,8 +208,7 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
             {
                 if(editGasto())
                 {
-                    getFragmentManager().popBackStack();//close this fragment
-                    Toast.makeText(getActivity(), R.string.valueupdate, Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStack();
                 }
                 else
                 {
@@ -205,6 +217,21 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
             }
         });
 
+        setCantidad(spinner_type.getSelectedItemPosition());
+    }
+
+    public void setCantidad(int position)
+    {
+        String tipo = (String) spinner_type.getItemAtPosition(position);
+
+        if(tipo.equals("Servicio"))
+        {
+            et_cantidad.setEnabled(false);
+        }
+        else if(tipo.equals("Producto"))
+        {
+            et_cantidad.setEnabled(true);
+        }
     }
 
     public boolean readGasto()
@@ -223,7 +250,19 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
                 {
                     int tipo = cursor.getInt(TableGastos.COL_ICODTIPO_ID);
 
-                    if(tipo == 2)
+                    if(tipo == 1)
+                    {
+                        Gasto = new Servicio(
+                                cursor.getInt(TableGastos.COL_ICODUSUARIO_ID),
+                                cursor.getLong(TableGastos.COL_ICODCAT_ID),
+                                cursor.getString(TableGastos.COL_DESC_ID),
+                                cursor.getString(TableGastos.COL_NOMBRE_ID),
+                                cursor.getDouble(TableGastos.COL_COSTO_ID),
+                                df.parse(cursor.getString(TableGastos.COL_FECHA_ID)));
+
+                        et_cantidad.setText("NA");
+                    }
+                    else if(tipo == 2)
                     {
 
                         Gasto = new Producto(
@@ -234,17 +273,8 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
                                 cursor.getDouble(TableGastos.COL_COSTO_ID),
                                 cursor.getInt(TableGastos.COL_CANT_ID),
                                 df.parse(cursor.getString(TableGastos.COL_FECHA_ID)));
-                    }
-                    else if(tipo == 0)
-                    {
-                        Gasto = new Servicio(
-                                cursor.getInt(TableGastos.COL_ICODUSUARIO_ID),
-                                cursor.getLong(TableGastos.COL_ICODCAT_ID),
-                                cursor.getString(TableGastos.COL_DESC_ID),
-                                cursor.getString(TableGastos.COL_NOMBRE_ID),
-                                cursor.getDouble(TableGastos.COL_COSTO_ID),
-                                cursor.getInt(TableGastos.COL_CANT_ID),
-                                df.parse(cursor.getString(TableGastos.COL_FECHA_ID)));
+
+                        et_cantidad.setText(Integer.toString(Gasto.getCantidad()));
                     }
                     else
                     {
@@ -296,12 +326,15 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
 
             if(tipo.equals("Producto")) //tengo que generalizar esto
             {
+                int cantidad = Integer.parseInt(et_cantidad.getText().toString());
+
                 Gasto = new Producto(
                         TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
                         catid,
                         desc,
                         nombre,
                         monto,
+                        cantidad,
                         df.parse(etDate.getText().toString()));
             }
             else if(tipo.equals("Servicio"))

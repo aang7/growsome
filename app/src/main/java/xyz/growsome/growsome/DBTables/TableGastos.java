@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import xyz.growsome.growsome.Gastos.Gastos;
 import xyz.growsome.growsome.Gastos.Producto;
 import xyz.growsome.growsome.Gastos.Servicio;
-import xyz.growsome.growsome.Ingresos.Ingresos;
-import xyz.growsome.growsome.Ingresos.Pago;
-import xyz.growsome.growsome.Ingresos.Salario;
 
 /**
  * Created by cheko on 11/04/2017.
