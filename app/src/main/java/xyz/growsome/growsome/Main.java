@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,7 +41,6 @@ import xyz.growsome.growsome.Gastos.GastosMainFragment;
 import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
 import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.JSONHelper;
-import xyz.growsome.growsome.Utils.PrefHelper;
 
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
@@ -55,12 +55,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private String userEmail = "";
     ActionBarDrawerToggle toggle;
     Toolbar toolbar;
-
-
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        dbHelper = new DBHelper(this);
+
         setContentView(R.layout.activity_main);
 
         setup();
@@ -127,19 +129,22 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 TableUsuarios.insert(db, jsonObj);
 
-                PrefHelper.saveToPrefs(this, "PREF_USERNAME", userName);
-                PrefHelper.saveToPrefs(this, "PREF_USEREMAIL", userEmail);
+//                PrefHelper.saveToPrefs(this, "PREF_USERNAME", userName);
+//                PrefHelper.saveToPrefs(this, "PREF_USEREMAIL", userEmail);
             }
-            catch (JSONException e)
+            catch (JSONException ex)
             {
-                e.printStackTrace();
+                ex.printStackTrace();
+                Toast.makeText(this, R.string.error_default, Toast.LENGTH_SHORT).show();
             }
         }
         else
         {
             try
             {
-                //use DB
+                String[] data = TableUsuarios.getUserData(dbHelper.getReadableDatabase());
+                navName.setText(data[0]);
+                navEmail.setText(data[1]);
             }
             catch (Exception ex)
             {
