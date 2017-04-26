@@ -132,9 +132,8 @@ public class GastosReadFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         ((Main)getActivity()).showDrawer(true);
     }
 

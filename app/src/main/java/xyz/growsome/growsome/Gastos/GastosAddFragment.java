@@ -273,9 +273,9 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
     }
 
     @Override
-    public void onDestroy()
+    public void onDestroyView()
     {
-        super.onDestroy();
+        super.onDestroyView();
         ((Main)getActivity()).showDrawer(true); //enable drawer again
     }
 }

@@ -129,9 +129,9 @@ public class IngresosEditFragment extends Fragment implements DatePickerDialog.O
     }
 
     @Override
-    public void onDestroy()
+    public void onDestroyView()
     {
-        super.onDestroy();
+        super.onDestroyView();
         ((Main)getActivity()).showDrawer(true);
     }
 

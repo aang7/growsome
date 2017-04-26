@@ -110,9 +110,9 @@ public class IngresosReadFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy()
+    public void onDestroyView()
     {
-        super.onDestroy();
+        super.onDestroyView();
         ((Main)getActivity()).showDrawer(true);
     }
 
