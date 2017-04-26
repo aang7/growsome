@@ -4,5 +4,51 @@
     android:layout_height="match_parent"
     tools:context="xyz.growsome.growsome.Categorias.CategoriaReadFragment">
 
+    <ScrollView
+        android:id="@+id/scroll_categorias_add"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/categorias_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/categorias_field_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_chevron_right_black_24dp"
+                    android:drawablePadding="2dp"
+                    android:hint="@string/field_name"
+                    android:textIsSelectable="true"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/categorias_field_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_description_black_24dp"
+                    android:drawablePadding="2dp"
+                    android:hint="@string/field_desc"
+                    android:textIsSelectable="true"
+                    android:maxLines="6" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

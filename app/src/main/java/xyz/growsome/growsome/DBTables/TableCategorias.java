@@ -50,6 +50,13 @@ public class TableCategorias {
         onCreate(database);
     }
 
+    public static int getUserID(SQLiteDatabase db)
+    {
+        Cursor cursor = db.rawQuery("select " + COL_ICOD +" from " + TABLE_NAME, new String[]{});
+        cursor.moveToFirst();
+        return  cursor.getInt(COL_ICOD_ID);
+    }
+
     public static boolean insert(SQLiteDatabase db, Categoria obj)
     {
         try
@@ -80,6 +87,30 @@ public class TableCategorias {
 
         return true;
     }
+
+    public static boolean update(SQLiteDatabase db, Categoria obj, long iCod)
+    {
+        String query = "update "
+                + TABLE_NAME
+                + " set "
+                + COL_NOMBRE + " = '" + obj.getName().replaceAll("'", "''") + "', "
+                + COL_COLOR + " = '" + obj.getColor().replaceAll("'", "''") + "', "
+                + COL_DESC + " = '" + obj.getDesc().replaceAll("'", "''") + "', "
+                + COL_DATE + " = datetime('now', 'localtime')"
+                + " where "
+                + COL_ICOD + " = " + iCod
+                + ";";
+        try {
+            db.execSQL(query);
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
 
     public static int getCatID(SQLiteDatabase db, String name)
     {

@@ -38,8 +38,6 @@ public class CategoriaAddFragment extends Fragment
 
         //((Main)getActivity()).showDrawer(false);
 
-        getActivity().setTitle(R.string.title_fragment_categorias);
-
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_categoria_add, container, false);

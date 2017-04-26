@@ -35,6 +35,7 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
 import xyz.growsome.growsome.Categorias.CategoriaAddFragment;
+import xyz.growsome.growsome.Categorias.CategoriaMainFragment;
 import xyz.growsome.growsome.DBTables.TableUsuarios;
 import xyz.growsome.growsome.Gastos.GastosMainFragment;
 import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
@@ -235,7 +236,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 fragment = new GastosMainFragment();
                 break;
             case R.id.categorias_item:
-                fragment = new CategoriaAddFragment();
+                fragment = new CategoriaMainFragment();
                 break;
             case R.id.settings_item:
                 Intent intent = new Intent(this, Settings.class);
