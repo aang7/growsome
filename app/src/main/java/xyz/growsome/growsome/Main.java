@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,8 +34,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
-import xyz.growsome.growsome.Categorias.CategoriaAddFragment;
-import xyz.growsome.growsome.Categorias.CategoriaMainFragment;
+import xyz.growsome.growsome.Categorias.CategoriasMainFragment;
 import xyz.growsome.growsome.DBTables.TableUsuarios;
 import xyz.growsome.growsome.Gastos.GastosMainFragment;
 import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
@@ -241,7 +239,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 fragment = new GastosMainFragment();
                 break;
             case R.id.categorias_item:
-                fragment = new CategoriaMainFragment();
+                fragment = new CategoriasMainFragment();
                 break;
             case R.id.settings_item:
                 Intent intent = new Intent(this, Settings.class);

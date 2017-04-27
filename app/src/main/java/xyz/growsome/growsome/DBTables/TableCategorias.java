@@ -100,9 +100,11 @@ public class TableCategorias {
                 + " where "
                 + COL_ICOD + " = " + iCod
                 + ";";
-        try {
+        try
+        {
             db.execSQL(query);
-        }catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             ex.printStackTrace();
             return false;

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.growsome.growsome.Categorias.CategoriaAddFragment">
+    tools:context="xyz.growsome.growsome.Categorias.CategoriasAddFragment">
 
     <ScrollView
         android:id="@+id/scroll_categorias_add"
@@ -83,13 +83,14 @@
             </FrameLayout>
 
             <Button
-                android:id="@+id/categorias_add_btnSave"
+                android:id="@+id/categorias_btnSave"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/action_add"
                 android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.growsome.growsome.Categorias.CategoriaEditFragment">
+    tools:context="xyz.growsome.growsome.Categorias.CategoriasEditFragment">
     <ScrollView
         android:id="@+id/scroll_categorias_add"
         android:layout_width="match_parent"
@@ -48,16 +48,49 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <FrameLayout
+                android:id="@+id/categorias_field_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/field_color"
+                        android:textSize="18sp"
+                        android:paddingLeft="4dp"
+                        android:drawableStart="@drawable/ic_color_lens_black_24dp"
+                        android:drawablePadding="2dp"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageView
+                        android:id="@+id/categorias_image"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/colorAccent" />
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
             <Button
                 android:id="@+id/categorias_btnSave"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/action_update"
                 android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
-
-
 </FrameLayout>

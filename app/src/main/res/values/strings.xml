@@ -62,6 +62,7 @@
     <string name="error_invalid_name">The name is invalid</string>
     <string name="error_default">Ups! Something went wrong</string>
     <string name="error_repeated_category">Category name already used</string>
+    <string name="error_bad_input">Wrong data entered</string>
 
     <!-- Navigation Drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -134,6 +134,13 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
         }
     }
 
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        ((Main)getActivity()).showDrawer(true);
+    }
+
     public boolean setup()
     {
         Cursor cursorTipos = dbHelper.selectQuery(TableTipoIngreso.SELECT_ALL);
@@ -221,12 +228,5 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
         }
 
         return  true;
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        super.onDestroyView();
-        ((Main)getActivity()).showDrawer(true); //enable drawer again
     }
 }

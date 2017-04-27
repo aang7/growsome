@@ -109,8 +109,8 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         mPasswordView.setError(null);
 
         // Obtiene los valores de los controles
-        email = mEmailView.getText().toString();
-        password = mPasswordView.getText().toString();
+        email = mEmailView.getText().toString().trim();
+        password = mPasswordView.getText().toString().trim();
 
         boolean cancel = false;
         View focusView = null;
