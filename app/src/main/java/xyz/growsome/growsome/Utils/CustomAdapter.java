@@ -26,7 +26,6 @@ public class CustomAdapter extends ArrayAdapter<ItemData> {
     Context mContext;
     private ArrayList<ItemData> dataSet;
 
-
     public CustomAdapter(ArrayList<ItemData> data, Context context) {
         super(context, R.layout.row_item, data);
         this.dataSet = data;
@@ -71,7 +70,7 @@ public class CustomAdapter extends ArrayAdapter<ItemData> {
 
             viewHolder.txtName.setText(itemData.getName());
             viewHolder.txtMonto.setText(itemData.getMonto());
-            viewHolder.imgCat.setBackgroundColor(Color.parseColor(itemData.getCatColor()));
+            viewHolder.imgCat.setBackgroundColor(Integer.parseInt(itemData.getCatColor()));
 
 
         // Return the completed view to render on screen

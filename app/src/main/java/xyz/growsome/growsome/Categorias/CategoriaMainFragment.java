@@ -69,7 +69,7 @@ public class CategoriaMainFragment extends Fragment {
                         cursor.getLong(TableCategorias.COL_ICOD_ID),
                         cursor.getString(TableCategorias.COL_NOMBRE_ID),
                         cursor.getString(TableCategorias.COL_DESC_ID),
-                        cursor.getString(TableCategorias.COL_NOMBRE_ID));
+                        cursor.getString(TableCategorias.COL_COLOR_ID));
 
                 lCategoriaitems.add(itemData);
             }

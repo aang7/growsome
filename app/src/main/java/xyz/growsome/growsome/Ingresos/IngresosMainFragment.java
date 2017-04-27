@@ -21,6 +21,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableIngresos;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
@@ -65,23 +66,28 @@ public class IngresosMainFragment extends Fragment {
 
         dbHelper = new DBHelper(getActivity());
 
-
-        Cursor cursor = dbHelper.selectQuery(TableIngresos.SELECT_ALL);
+        Cursor cursor = dbHelper.selectQuery("select " +
+                "a." + TableIngresos.COL_ICOD + ", " +
+                "a." + TableIngresos.COL_NOMBRE + ", " +
+                "a." + TableIngresos.COL_MONTO + ", " +
+                "b." + TableCategorias.COL_COLOR + " " +
+                "from " + TableIngresos.TABLE_NAME + " a " +
+                "inner join " + TableCategorias.TABLE_NAME + " b " +
+                "on a." + TableIngresos.COL_ICODCAT + " = " + "b." + TableCategorias.COL_ICOD);
 
         lIngresositems = new ArrayList<>();
 
         listView=(ListView)view.findViewById(R.id.list);
-
 
         try
         {
             while (cursor.moveToNext())
             {
                 ItemData itemData = new ItemData(
-                        cursor.getLong(TableIngresos.COL_ICOD_ID),
-                        cursor.getString(TableIngresos.COL_NOMBRE_ID),
-                        cursor.getString(TableIngresos.COL_MONTO_ID),
-                        cursor.getString(TableIngresos.COL_ICODCAT_ID));
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3));
 
                 lIngresositems.add(itemData);
             }

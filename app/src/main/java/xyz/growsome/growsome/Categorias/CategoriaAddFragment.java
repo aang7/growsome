@@ -85,7 +85,7 @@ public class CategoriaAddFragment extends Fragment
             public void onColorChosen(int color)
             {
                 colorImage.setBackgroundColor(color);
-                pickercolor = Integer.toHexString(color);
+                pickercolor = String.valueOf(color);
                 colorPicker.hide();
             }
         });
@@ -108,17 +108,21 @@ public class CategoriaAddFragment extends Fragment
                 return false;
             }
 
-            if (pickercolor != null) {
+            if (pickercolor != null)
+            {
                 Categoria categoria = new Categoria(0, TableUsuarios.getUserID(dbHelper.getReadableDatabase()), nombre, pickercolor, desc);
                 try
-                    {
-                        TableCategorias.insert(dbHelper.getWritableDatabase(), categoria);
-                    }catch (Exception ex)
-                        {
-                            ex.printStackTrace();
-                        }
+                {
+                    TableCategorias.insert(dbHelper.getWritableDatabase(), categoria);
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                    return false;
+                }
             }
-            else {
+            else
+            {
                 return false;
             }
 

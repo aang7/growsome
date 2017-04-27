@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableGastos;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
@@ -62,7 +63,14 @@ public class GastosMainFragment extends Fragment {
         dbHelper = new DBHelper(getActivity());
 
 
-        Cursor cursor = dbHelper.selectQuery(TableGastos.SELECT_ALL);
+        Cursor cursor = dbHelper.selectQuery("select " +
+                "a." + TableGastos.COL_ICOD + ", " +
+                "a." + TableGastos.COL_NOMBRE + ", " +
+                "a." + TableGastos.COL_COSTO + ", " +
+                "b." + TableCategorias.COL_COLOR + " " +
+                "from " + TableGastos.TABLE_NAME + " a " +
+                "inner join " + TableCategorias.TABLE_NAME + " b " +
+                "on a." + TableGastos.COL_ICODCAT + " = " + "b." + TableCategorias.COL_ICOD);
 
         lGastositems = new ArrayList<>();
 
@@ -74,10 +82,10 @@ public class GastosMainFragment extends Fragment {
             while (cursor.moveToNext())
             {
                 ItemData itemData = new ItemData(
-                        cursor.getLong(TableGastos.COL_ICOD_ID),
-                        cursor.getString(TableGastos.COL_NOMBRE_ID),
-                        cursor.getString(TableGastos.COL_COSTO_ID),
-                        cursor.getString(TableGastos.COL_NOMBRE_ID));
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3));
 
                 lGastositems.add(itemData);
             }

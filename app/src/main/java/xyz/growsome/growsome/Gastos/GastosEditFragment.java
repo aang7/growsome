@@ -227,10 +227,12 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
         if(tipo.equals("Servicio"))
         {
             et_cantidad.setEnabled(false);
+            et_cantidad.setText("NA");
         }
         else if(tipo.equals("Producto"))
         {
             et_cantidad.setEnabled(true);
+            if(et_cantidad.getText().toString().equals("NA")){et_cantidad.setText("");}
         }
     }
 
