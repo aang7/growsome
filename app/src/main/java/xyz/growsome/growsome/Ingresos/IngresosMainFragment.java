@@ -81,7 +81,7 @@ public class IngresosMainFragment extends Fragment {
                         cursor.getLong(TableIngresos.COL_ICOD_ID),
                         cursor.getString(TableIngresos.COL_NOMBRE_ID),
                         cursor.getString(TableIngresos.COL_MONTO_ID),
-                        cursor.getString(TableIngresos.COL_NOMBRE_ID));
+                        cursor.getString(TableIngresos.COL_ICODCAT_ID));
 
                 lIngresositems.add(itemData);
             }

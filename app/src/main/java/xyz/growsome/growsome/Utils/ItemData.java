@@ -11,12 +11,13 @@ public class ItemData {
     String cat;
     long id;
 
-
-    public ItemData(long _id, String _name, String _monto, String _cat)
+    /** Params:
+     *          _catcolor: category color **/
+    public ItemData(long _id, String _name, String _monto, String _catcolor)
     {
         setMonto(_monto);
         setName(_name);
-        setCat(_cat);
+        setCatColor(_catcolor);
         setId(_id);
 
     }
@@ -38,11 +39,11 @@ public class ItemData {
         this.monto = monto;
     }
 
-    public String getCat() {
+    public String getCatColor() {
         return cat;
     }
 
-    public void setCat(String cat) {
+    public void setCatColor(String cat) {
         this.cat = cat;
     }
 

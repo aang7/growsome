@@ -1,6 +1,7 @@
 package xyz.growsome.growsome.Utils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 //import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.Log;
@@ -57,7 +58,7 @@ public class CustomAdapter extends ArrayAdapter<ItemData> {
             convertView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.name);
             viewHolder.txtMonto = (TextView) convertView.findViewById(R.id.monto);
-            //viewHolder.imgCat
+            viewHolder.imgCat = (ImageView) convertView.findViewById(R.id.category_img);
 
             result = convertView;
 
@@ -69,9 +70,8 @@ public class CustomAdapter extends ArrayAdapter<ItemData> {
 
 
             viewHolder.txtName.setText(itemData.getName());
-            //viewHolder.imgCat.setText(dataModel.getType());
             viewHolder.txtMonto.setText(itemData.getMonto());
-
+            viewHolder.imgCat.setBackgroundColor(Color.parseColor(itemData.getCatColor()));
 
 
         // Return the completed view to render on screen
