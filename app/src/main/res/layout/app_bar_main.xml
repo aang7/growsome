@@ -62,7 +62,7 @@
             android:id="@+id/fab_categorias"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_chevron_right_black_24dp"
+            android:src="@drawable/ic_folder_black_24dp"
             fab:fab_size="mini"
             fab:fab_label="@string/title_fragment_categorias"
             tools:ignore="VectorDrawableCompat" />

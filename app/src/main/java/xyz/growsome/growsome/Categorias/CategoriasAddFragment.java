@@ -42,6 +42,8 @@ public class CategoriasAddFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        getActivity().setTitle(R.string.title_fragment_categorias);
+
         setHasOptionsMenu(true);
 
         ((Main)getActivity()).showDrawer(false);

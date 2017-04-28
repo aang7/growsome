@@ -22,6 +22,7 @@ public class TableGastos {
     public static final String COL_COSTO = "fltCosto";
     public static final String COL_CANT = "iCantidad";
     public static final String COL_FECHA = "dtFecha";
+    public static final String COL_DELETE = "bEliminado";
     public static final String COL_DATE = "dtCreacion";
 
     public static final int COL_ICOD_ID = 0;
@@ -33,7 +34,8 @@ public class TableGastos {
     public static final int COL_COSTO_ID = 6;
     public static final int COL_CANT_ID = 7;
     public static final int COL_FECHA_ID = 8;
-    public static final int COL_DATE_ID = 9;
+    public static final int COL_DELETE_ID = 9;
+    public static final int COL_DATE_ID = 10;
 
     private static final String DB_CREATE = "create table "
             + TABLE_NAME
@@ -47,6 +49,7 @@ public class TableGastos {
             + COL_COSTO + " real not null, "
             + COL_CANT + " integer not null, "
             + COL_FECHA + " text not null, "
+            + COL_DELETE + " integer not null, "
             + COL_DATE + " text not null"
             + ");";
 
@@ -55,7 +58,8 @@ public class TableGastos {
         database.execSQL(DB_CREATE);
     }
 
-    public static final String SELECT_ALL = "select * from " + TABLE_NAME;
+    public static final String SELECT_ALL = "select * from " + TABLE_NAME + " where "
+            + COL_DELETE + " = 0;";
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
     {
@@ -78,6 +82,7 @@ public class TableGastos {
                     + COL_COSTO + ", "
                     + COL_CANT + ", "
                     + COL_FECHA + ", "
+                    + COL_DELETE + ", "
                     + COL_DATE
                     + ")"
                     + " values "
@@ -89,6 +94,7 @@ public class TableGastos {
                     + "" + obj.getCosto() + ", "
                     + "" + obj.getCantidad() + ", "
                     + "'" + obj.getFecha("yyyy-MM-dd HH:mm:ss") + "', "
+                    + "0,"
                     + "datetime('now', 'localtime')"
                     + ");";
 
@@ -126,6 +132,28 @@ public class TableGastos {
         else
         {
             return  false;
+        }
+
+        return true;
+    }
+
+    public static boolean delete(SQLiteDatabase db, long iCod)
+    {
+        String query = "update "
+                + TABLE_NAME
+                + " set "
+                + COL_DELETE + " = 1"
+                + " where "
+                + COL_ICOD + " = " + iCod
+                + ";";
+        try
+        {
+            db.execSQL(query);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
         }
 
         return true;

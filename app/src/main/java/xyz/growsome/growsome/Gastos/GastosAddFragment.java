@@ -61,6 +61,8 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        getActivity().setTitle(R.string.title_fragment_gastos);
+
         setHasOptionsMenu(true);
 
         ((Main)getActivity()).showDrawer(false);
@@ -251,6 +253,13 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
             String nombre = et_nombre.getText().toString();
             double costo;
 
+            if (catid == 0)
+            {
+                Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
+                ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                return false;
+            }
+
             if(TextUtils.isEmpty(nombre.trim()))
             {
                 et_nombre.setError(getString(R.string.error_field_required));
@@ -320,25 +329,14 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                     return false;
                 }
 
-
-                if (catid != 0)
-                {
-                    Gasto = new Producto(
-                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                            catid,
-                            desc,
-                            nombre,
-                            costo,
-                            cantidad,
-                            date);
-
-                }else
-                {
-                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
-                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    return false;
-                }
-
+                Gasto = new Producto(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        costo,
+                        cantidad,
+                        date);
             }
             else if(tipo.equals("Servicio"))
             {
@@ -358,32 +356,23 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                     return false;
                 }
 
-                if (catid != 0)
-                {
-                    Gasto = new Servicio(
-                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                            catid,
-                            desc,
-                            nombre,
-                            costo,
-                            date);
-                }else
-                {
-                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
-                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    return false;
-                }
-
+                Gasto = new Servicio(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        costo,
+                        date);
             }
             else
             {
                 Toast.makeText(getActivity(), R.string.error_bad_input, Toast.LENGTH_SHORT).show();
-                return  false;
+                return false;
             }
 
             try
             {
-                    TableGastos.insert(dbHelper.getWritableDatabase(), Gasto);
+                TableGastos.insert(dbHelper.getWritableDatabase(), Gasto);
             }
             catch (Exception ex)
             {

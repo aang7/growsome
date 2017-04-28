@@ -17,6 +17,7 @@ public class TableCategorias {
     public static final String COL_NOMBRE = "vchNombre";
     public static final String COL_COLOR = "vchColor";
     public static final String COL_DESC = "vchDesc";
+    public static final String COL_DELETE = "bEliminado";
     public static final String COL_DATE = "dtCreacion";
 
     public static final int COL_ICOD_ID = 0;
@@ -24,7 +25,8 @@ public class TableCategorias {
     public static final int COL_NOMBRE_ID = 2;
     public static final int COL_COLOR_ID = 3;
     public static final int COL_DESC_ID = 4;
-    public static final int COL_DATE_ID = 5;
+    public static final int COL_DELETE_ID = 5;
+    public static final int COL_DATE_ID = 6;
 
     private static final String DB_CREATE = "create table "
             + TABLE_NAME
@@ -34,10 +36,12 @@ public class TableCategorias {
             + COL_NOMBRE + " text not null, "
             + COL_COLOR + " text not null, "
             + COL_DESC + " text not null, "
+            + COL_DELETE + " integer not null, "
             + COL_DATE + " text not null"
             + ");";
 
-    public static final String SELECT_ALL = "select * from " + TABLE_NAME;
+    public static final String SELECT_ALL = "select * from " + TABLE_NAME + " where "
+            + COL_DELETE + " = 0;";
 
     public static void  onCreate(SQLiteDatabase database)
     {
@@ -68,6 +72,7 @@ public class TableCategorias {
                     + COL_NOMBRE + ", "
                     + COL_COLOR + ", "
                     + COL_DESC + ", "
+                    + COL_DELETE + ", "
                     + COL_DATE
                     + ")"
                     + " values "
@@ -75,6 +80,7 @@ public class TableCategorias {
                     + "'" + obj.getName() + "', "
                     + "'" + obj.getColor() + "', "
                     + "'" + obj.getDesc() + "', "
+                    + "0, "
                     + "datetime('now', 'localtime')"
                     + ");";
 
@@ -113,6 +119,27 @@ public class TableCategorias {
         return true;
     }
 
+    public static boolean delete(SQLiteDatabase db, long iCod)
+    {
+        String query = "update "
+                + TABLE_NAME
+                + " set "
+                + COL_DELETE + " = 1"
+                + " where "
+                + COL_ICOD + " = " + iCod
+                + ";";
+        try
+        {
+            db.execSQL(query);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 
     public static int getCatID(SQLiteDatabase db, String name)
     {

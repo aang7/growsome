@@ -54,6 +54,8 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        getActivity().setTitle(R.string.title_fragment_ingresos);
+
         dbHelper = new DBHelper(getActivity());
 
         ((Main)getActivity()).showDrawer(false);
@@ -201,6 +203,13 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
             String nombre = et_nombre.getText().toString();
             double monto;
 
+            if (catid == 0)
+            {
+                Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
+                ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                return false;
+            }
+
             if(TextUtils.isEmpty(nombre.trim()))
             {
                 et_nombre.setError(getString(R.string.error_field_required));
@@ -230,7 +239,7 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
                 return false;
             }
 
-            if(tipo.equals("Salario")) //tengo que generalizar esto
+            if(tipo.equals("Salario"))
             {
                 if(TextUtils.isEmpty(desc.trim()))
                 {
@@ -248,21 +257,14 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
                     return false;
                 }
 
-                if (catid != 0)
-                {
-                    Ingreso = new Salario(
-                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                            catid,
-                            desc,
-                            nombre,
-                            Double.parseDouble(et_monto.getText().toString()),
-                            date);
-                }else
-                {
-                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
-                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    return false;
-                }
+                Ingreso = new Salario(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        Double.parseDouble(et_monto.getText().toString()),
+                        date);
+
             }
             else if(tipo.equals("Pago"))
             {
@@ -281,23 +283,14 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
                     focusView.requestFocus();
                     return false;
                 }
-                if (catid != 0)
-                {
-                    Ingreso = new Pago(
-                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                            catid,
-                            desc,
-                            nombre,
-                            monto,
-                            date);
 
-                }else
-                {
-                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
-                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    return false;
-                }
-
+                Ingreso = new Pago(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        monto,
+                        date);
             }
             else
             {

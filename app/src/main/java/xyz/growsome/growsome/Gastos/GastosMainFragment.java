@@ -60,7 +60,8 @@ public class GastosMainFragment extends Fragment {
                 "b." + TableCategorias.COL_COLOR + " " +
                 "from " + TableGastos.TABLE_NAME + " a " +
                 "inner join " + TableCategorias.TABLE_NAME + " b " +
-                "on a." + TableGastos.COL_ICODCAT + " = " + "b." + TableCategorias.COL_ICOD);
+                "on a." + TableGastos.COL_ICODCAT + " = " + "b." + TableCategorias.COL_ICOD +
+                " where a. " + TableGastos.COL_DELETE + " = 0");
 
         lGastositems = new ArrayList<>();
 
@@ -146,18 +147,30 @@ public class GastosMainFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item)
     {
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", lGastositems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId());
+        long id = lGastositems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId();
 
         if (item.getTitle() == "Edit Item")
         {
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", id);
             GastosEditFragment fragment = new GastosEditFragment();
             fragment.setArguments(bundle);
             ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         }
         else if (item.getTitle() == "Delete Item")
         {
-            //TODO: Delete item
+            try
+            {
+                TableGastos.delete(dbHelper.getWritableDatabase(), id);
+                GastosMainFragment fragment = new GastosMainFragment();
+                ((Main)getActivity()).setFragment(fragment);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                return false;
+            }
+
             return true;
         }
 

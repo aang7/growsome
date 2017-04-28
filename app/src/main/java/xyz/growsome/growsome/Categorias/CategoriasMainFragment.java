@@ -133,18 +133,30 @@ public class CategoriasMainFragment extends Fragment
     @Override
     public boolean onContextItemSelected(MenuItem item)
     {
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", lCategoriaitems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId());
+        long id = lCategoriaitems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId();
 
         if (item.getTitle() == "Edit Item")
         {
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", lCategoriaitems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId());
             CategoriasEditFragment fragment = new CategoriasEditFragment();
             fragment.setArguments(bundle);
             ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         }
         else if (item.getTitle() == "Delete Item")
         {
-            //TODO: Delete item
+            try
+            {
+                TableCategorias.delete(dbHelper.getWritableDatabase(), id);
+                CategoriasMainFragment fragment = new CategoriasMainFragment();
+                ((Main)getActivity()).setFragment(fragment);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                return false;
+            }
+
             return true;
         }
 

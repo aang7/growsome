@@ -56,10 +56,9 @@ public class IngresosMainFragment extends Fragment {
 
     }
 
-    /* Esta cosa es del List Fragment*/
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         getActivity().setTitle(R.string.title_fragment_ingresos);
 
         View view = inflater.inflate(R.layout.fragment_ingresos_main, container, false);
@@ -73,7 +72,8 @@ public class IngresosMainFragment extends Fragment {
                 "b." + TableCategorias.COL_COLOR + " " +
                 "from " + TableIngresos.TABLE_NAME + " a " +
                 "inner join " + TableCategorias.TABLE_NAME + " b " +
-                "on a." + TableIngresos.COL_ICODCAT + " = " + "b." + TableCategorias.COL_ICOD);
+                "on a." + TableIngresos.COL_ICODCAT + " = " + "b." + TableCategorias.COL_ICOD +
+                " where a. " + TableIngresos.COL_DELETE + " = 0");
 
         lIngresositems = new ArrayList<>();
 
@@ -152,17 +152,29 @@ public class IngresosMainFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item)
     {
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", lIngresositems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId());
-        IngresosEditFragment fragment = new IngresosEditFragment();
-        fragment.setArguments(bundle);
+        long id = lIngresositems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId();
+
         if (item.getTitle() == "Edit Item")
         {
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", id);
+            IngresosEditFragment fragment = new IngresosEditFragment();
+            fragment.setArguments(bundle);
             ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         }
         else if (item.getTitle() == "Delete Item")
         {
-            //TODO: Delete item
+            try
+            {
+                TableIngresos.delete(dbHelper.getWritableDatabase(), id);
+                IngresosMainFragment fragment = new IngresosMainFragment();
+                ((Main)getActivity()).setFragment(fragment);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                return false;
+            }
             return true;
         }
         return super.onContextItemSelected(item);

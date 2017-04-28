@@ -21,6 +21,7 @@ public class TableIngresos {
     public static final String COL_DESC = "vchDesc";
     public static final String COL_MONTO = "fltMonto";
     public static final String COL_FECHA = "dtFecha";
+    public static final String COL_DELETE = "bEliminado";
     public static final String COL_DATE = "dtCreacion";
 
     public static final int COL_ICOD_ID = 0;
@@ -31,7 +32,8 @@ public class TableIngresos {
     public static final int COL_DESC_ID = 5;
     public static final int COL_MONTO_ID = 6;
     public static final int COL_FECHA_ID = 7;
-    public static final int COL_DATE_ID = 8;
+    public static final int COL_DELETE_ID = 8;
+    public static final int COL_DATE_ID = 9;
 
     private static final String DB_CREATE = "create table "
             + TABLE_NAME
@@ -44,10 +46,12 @@ public class TableIngresos {
             + COL_DESC + " text, "
             + COL_MONTO + " real not null, "
             + COL_FECHA + " text not null, "
+            + COL_DELETE + " integer not null, "
             + COL_DATE + " text not null"
             + ");";
 
-    public static final String SELECT_ALL = "select * from " + TABLE_NAME;
+    public static final String SELECT_ALL = "select * from " + TABLE_NAME + " where "
+            + COL_DELETE + " = 0;";
 
     public static void  onCreate(SQLiteDatabase database)
     {
@@ -74,6 +78,7 @@ public class TableIngresos {
                     + COL_DESC + ", "
                     + COL_MONTO + ", "
                     + COL_FECHA + ", "
+                    + COL_DELETE + ", "
                     + COL_DATE
                     + ")"
                     + " values "
@@ -84,6 +89,7 @@ public class TableIngresos {
                     + "'" + obj.getString(COL_DESC) + "', "
                     + "" + obj.getString(COL_MONTO) + ", "
                     + "'" + obj.getString(COL_FECHA) + "', "
+                    + "0,"
                     + "'" + obj.getString(COL_DATE) + "'"
                     + ");";
 
@@ -111,6 +117,7 @@ public class TableIngresos {
                     + COL_DESC + ", "
                     + COL_MONTO + ", "
                     + COL_FECHA + ", "
+                    + COL_DELETE + ", "
                     + COL_DATE
                     + ")"
                     + " values "
@@ -121,6 +128,7 @@ public class TableIngresos {
                     + "'" + obj.getDesc().replaceAll("'", "''") + "', "
                     + "" + obj.getMonto() + ", "
                     + "'" + obj.getFecha("yyyy-MM-dd HH:mm:ss") + "', "
+                    + "0,"
                     + "datetime('now', 'localtime')"
                     + ");";
 
@@ -157,6 +165,28 @@ public class TableIngresos {
         else
         {
             return  false;
+        }
+
+        return true;
+    }
+
+    public static boolean delete(SQLiteDatabase db, long iCod)
+    {
+        String query = "update "
+                + TABLE_NAME
+                + " set "
+                + COL_DELETE + " = 1"
+                + " where "
+                + COL_ICOD + " = " + iCod
+                + ";";
+        try
+        {
+            db.execSQL(query);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
         }
 
         return true;

@@ -27,9 +27,10 @@
     <string name="field_color">Color</string>
 
     <!-- Activity Login -->
-    <string name="title_activity_login">Log In</string>
+    <string name="title_activity_login">Sign In</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="label_login">Sign in with your email and password!</string>
 
     <!-- Activity Main -->
     <string name="title_activity_main">Main</string>

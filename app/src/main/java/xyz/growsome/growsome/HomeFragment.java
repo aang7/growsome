@@ -60,10 +60,13 @@ public class HomeFragment extends Fragment
     }
 
     private final String SELECT_GASTOS_TOTAL = "SELECT SUM(" + TableGastos.COL_COSTO
-                                                    + ") FROM " + TableGastos.TABLE_NAME;
+            + ") FROM " + TableGastos.TABLE_NAME
+            + " where " + TableGastos.COL_DELETE + " = 0";
+
 
     private final String SELECT_INGRESOS_TOTAL = "SELECT SUM(" + TableIngresos.COL_MONTO
-                                                    + ") FROM " + TableIngresos.TABLE_NAME;
+            + ") FROM " + TableIngresos.TABLE_NAME
+            + " where " + TableIngresos.COL_DELETE + " = 0" ;
 
     public boolean setup(){
         Cursor cursorGastoTotal = dbHelper.selectQuery(SELECT_GASTOS_TOTAL);

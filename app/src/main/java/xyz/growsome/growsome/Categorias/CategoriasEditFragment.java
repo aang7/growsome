@@ -106,7 +106,7 @@ public class CategoriasEditFragment extends Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.cancel_menu, menu);
+        inflater.inflate(R.menu.delete_menu, menu);
         menu.setGroupVisible(R.id.general_group, false);
     }
 
@@ -116,6 +116,18 @@ public class CategoriasEditFragment extends Fragment
         switch (item.getItemId())
         {
             case R.id.action_cancel:
+                getFragmentManager().popBackStack();
+                return true;
+            case R.id.action_delete:
+                try
+                {
+                    TableCategorias.delete(dbHelper.getWritableDatabase(), iCodCategory);
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                    return false;
+                }
                 getFragmentManager().popBackStack();
                 return true;
             default:

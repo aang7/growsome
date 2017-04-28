@@ -41,6 +41,15 @@
     <string name="quantity">Cantidad</string>
     <string name="valueupdate">Actualizado!</string>
     <string name="error_without_category">Necitas agregar una categoría</string>
+    <string name="error_bad_input">Datos de entrada incorrectos</string>
+    <string name="error_repeated_category">Nombre de categoria repetido</string>
+    <string name="field_color">Color</string>
+    <string name="field_date">Fecha</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="label_login">Ingresa tu correo y contraseña para iniciar sesión!</string>
+    <string name="title_fragment_categorias">Categorias</string>
+    <string name="prompt_email">Correo</string>
+    <string name="prompt_password">Contraseña</string>
 
 </resources>
 

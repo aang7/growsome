@@ -1,5 +1,6 @@
 package xyz.growsome.growsome.Gastos;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import xyz.growsome.growsome.Categorias.CategoriasAddFragment;
 import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableUsuarios;
 import xyz.growsome.growsome.Main;
@@ -130,7 +132,7 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.cancel_menu, menu);
+        inflater.inflate(R.menu.delete_menu, menu);
         menu.setGroupVisible(R.id.general_group, false);
     }
 
@@ -140,6 +142,18 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
         switch (item.getItemId())
         {
             case R.id.action_cancel:
+                getFragmentManager().popBackStack();
+                return true;
+            case R.id.action_delete:
+                try
+                {
+                    TableGastos.delete(dbHelper.getWritableDatabase(), iCodGasto);
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                    return false;
+                }
                 getFragmentManager().popBackStack();
                 return true;
             default:
@@ -338,6 +352,13 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
             String nombre = et_nombre.getText().toString();
             double monto;
 
+            if (catid == 0)
+            {
+                Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
+                ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                return false;
+            }
+
             if(TextUtils.isEmpty(nombre.trim()))
             {
                 et_nombre.setError(getString(R.string.error_field_required));
@@ -366,7 +387,7 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
                 return false;
             }
 
-            if(tipo.equals("Producto")) //tengo que generalizar esto
+            if(tipo.equals("Producto"))
             {
                 int cantidad;
 
@@ -473,7 +494,7 @@ public class GastosEditFragment extends Fragment implements DatePickerDialog.OnD
             else
             {
                 Toast.makeText(getActivity(), R.string.error_bad_input, Toast.LENGTH_SHORT).show();
-                return  false;
+                return false;
             }
 
             try
