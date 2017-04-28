@@ -4,7 +4,6 @@ import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.annotation.Nullable;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import xyz.growsome.growsome.DBTables.TableCategorias;
-import xyz.growsome.growsome.Ingresos.IngresosEditFragment;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.CustomAdapter;
@@ -37,16 +35,11 @@ public class CategoriasMainFragment extends Fragment
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         getActivity().setTitle(R.string.title_fragment_categorias);
+
+        setHasOptionsMenu(true);
 
         ((Main)getActivity()).showFAB(false);
 
@@ -75,10 +68,12 @@ public class CategoriasMainFragment extends Fragment
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
             return view;
         }
-        finally {
+        finally
+        {
             cursor.close();
         }
 

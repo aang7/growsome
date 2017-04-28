@@ -4,7 +4,6 @@ import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,16 +29,12 @@ public class CategoriasReadFragment extends Fragment
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        setHasOptionsMenu(true);
+
         ((Main)getActivity()).showDrawer(false);
         ((Main)getActivity()).showFAB(false);
 
@@ -86,6 +81,14 @@ public class CategoriasReadFragment extends Fragment
         }
     }
 
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        ((Main)getActivity()).showDrawer(true);
+        dbHelper.close();
+    }
+
     public boolean readCategoria()
     {
         try
@@ -106,6 +109,7 @@ public class CategoriasReadFragment extends Fragment
             }
             catch (Exception ex)
             {
+                ex.printStackTrace();
                 Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -116,6 +120,7 @@ public class CategoriasReadFragment extends Fragment
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
             return false;
         }

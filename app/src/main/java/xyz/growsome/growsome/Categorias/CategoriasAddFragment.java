@@ -100,7 +100,7 @@ public class CategoriasAddFragment extends Fragment
     {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.cancel_menu, menu);
-        menu.setGroupVisible(R.id.general_group, false); //hidding main items
+        menu.setGroupVisible(R.id.general_group, false);
     }
 
     @Override
@@ -169,6 +169,7 @@ public class CategoriasAddFragment extends Fragment
                 }
                 catch (Exception ex)
                 {
+                    ex.printStackTrace();
                     Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                     return false;
                 }
@@ -181,8 +182,8 @@ public class CategoriasAddFragment extends Fragment
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
-            Log.d("Error", ex.toString());
             return false;
         }
 

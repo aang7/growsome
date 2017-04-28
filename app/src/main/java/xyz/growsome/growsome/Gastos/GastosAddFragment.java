@@ -1,10 +1,10 @@
 package xyz.growsome.growsome.Gastos;
 
-
 import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,21 +29,14 @@ import java.util.List;
 
 import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableGastos;
-import xyz.growsome.growsome.DBTables.TableIngresos;
 import xyz.growsome.growsome.DBTables.TableTipoGasto;
-import xyz.growsome.growsome.DBTables.TableTipoIngreso;
 import xyz.growsome.growsome.DBTables.TableUsuarios;
-import xyz.growsome.growsome.Ingresos.Pago;
-import xyz.growsome.growsome.Ingresos.Salario;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
-
+public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener
+{
     DBHelper dbHelper;
     Spinner spinner_type;
     Spinner spinner_cat;
@@ -63,18 +56,17 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        dbHelper = new DBHelper(getActivity());
+        setHasOptionsMenu(true);
 
         ((Main)getActivity()).showDrawer(false);
         ((Main)getActivity()).showFAB(false);
 
-        setHasOptionsMenu(true);
-
         View view = inflater.inflate(R.layout.fragment_gastos_add, container, false);
+
+        dbHelper = new DBHelper(getActivity());
 
         et_nombre = (EditText) view.findViewById(R.id.gastos_field_nombre);
         et_descripcion = (EditText) view.findViewById(R.id.gastos_field_desc);
@@ -95,7 +87,8 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
         etDate.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 datePickerDialog.show();
             }
         });
@@ -108,10 +101,6 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                 if(saveGasto())
                 {
                     getFragmentManager().popBackStack();
-                }
-                else
-                {
-                    Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -133,117 +122,8 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
         return view;
     }
 
-    public boolean setup()
+    public void onDateSet(DatePicker view, int year, int month, int day)
     {
-        Cursor cursorTipos = dbHelper.selectQuery(TableTipoGasto.SELECT_ALL);
-        Cursor cursorCats = dbHelper.selectQuery(TableCategorias.SELECT_ALL);
-
-        List<String> tipos = new ArrayList<>();
-        List<String> cats = new ArrayList<>();
-
-        try
-        {
-            while (cursorTipos.moveToNext())
-            {
-                tipos.add(cursorTipos.getString(TableTipoGasto.COL_DESC_ID));
-            }
-        }
-        finally
-        {
-            cursorTipos.close();
-        }
-
-        try
-        {
-            while (cursorCats.moveToNext())
-            {
-                cats.add(cursorCats.getString(TableCategorias.COL_NOMBRE_ID));
-            }
-        }
-        finally
-        {
-            cursorCats.close();
-        }
-
-        ArrayAdapter<String> adapterTipos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tipos);
-        adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_type.setAdapter(adapterTipos);
-
-        ArrayAdapter<String> adapterCats = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cats);
-        adapterCats.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_cat.setAdapter(adapterCats);
-
-        setCantidad(spinner_type.getSelectedItemPosition());
-
-        return true;
-    }
-
-    public boolean saveGasto()
-    {
-        try
-        {
-            String tipo = (String) spinner_type.getSelectedItem();
-            String cat = (String) spinner_cat.getSelectedItem();
-            int catid = TableCategorias.getCatID(dbHelper.getReadableDatabase(), cat);
-            String desc = et_descripcion.getText().toString();
-            String nombre = et_nombre.getText().toString();
-            double costo = Double.parseDouble(et_costo.getText().toString());
-
-            if(tipo.equals("Producto") && et_cantidad.isEnabled())
-            {
-
-                int cantidad = Integer.parseInt(et_cantidad.getText().toString());
-
-                Gasto = new Producto(
-                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                        catid,
-                        desc,
-                        nombre,
-                        costo,
-                        cantidad,
-                        date);
-            }
-            else if(tipo.equals("Servicio"))
-            {
-                Gasto = new Servicio(
-                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                        catid,
-                        desc,
-                        nombre,
-                        costo,
-                        date);
-            }
-            else
-            {
-                return  false;
-            }
-
-            TableGastos.insert(dbHelper.getWritableDatabase(), Gasto);
-        }
-        catch (Exception ex)
-        {
-            Log.d("Error", ex.toString());
-            return false;
-        }
-
-        return  true;
-    }
-
-    public void setCantidad(int position)
-    {
-        String tipo = (String) spinner_type.getItemAtPosition(position);
-
-        if(tipo.equals("Servicio"))
-        {
-            et_cantidad.setEnabled(false);
-        }
-        else if(tipo.equals("Producto"))
-        {
-            et_cantidad.setEnabled(true);
-        }
-    }
-
-    public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month);
@@ -256,7 +136,7 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.cancel_menu, menu);
-        menu.setGroupVisible(R.id.general_group, false); //hidding main items
+        menu.setGroupVisible(R.id.general_group, false);
     }
 
     @Override
@@ -276,6 +156,227 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
     public void onDestroyView()
     {
         super.onDestroyView();
-        ((Main)getActivity()).showDrawer(true); //enable drawer again
+        ((Main)getActivity()).showDrawer(true);
+        dbHelper.close();
+    }
+
+    public boolean setup()
+    {
+        Cursor cursorTipos = dbHelper.selectQuery(TableTipoGasto.SELECT_ALL);
+        Cursor cursorCats = dbHelper.selectQuery(TableCategorias.SELECT_ALL);
+
+        List<String> tipos = new ArrayList<>();
+        List<String> cats = new ArrayList<>();
+
+        try
+        {
+            while (cursorTipos.moveToNext())
+            {
+                tipos.add(cursorTipos.getString(TableTipoGasto.COL_DESC_ID));
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+            return  false;
+        }
+        finally
+        {
+            cursorTipos.close();
+        }
+
+        try
+        {
+            while (cursorCats.moveToNext())
+            {
+                cats.add(cursorCats.getString(TableCategorias.COL_NOMBRE_ID));
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+            return  false;
+        }
+        finally
+        {
+            cursorCats.close();
+        }
+
+        ArrayAdapter<String> adapterTipos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tipos);
+        adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_type.setAdapter(adapterTipos);
+
+        ArrayAdapter<String> adapterCats = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cats);
+        adapterCats.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_cat.setAdapter(adapterCats);
+
+        setCantidad(spinner_type.getSelectedItemPosition());
+
+        return true;
+    }
+
+    public void setCantidad(int position)
+    {
+        String tipo = (String) spinner_type.getItemAtPosition(position);
+
+        if(tipo.equals("Servicio"))
+        {
+            et_cantidad.setEnabled(false);
+        }
+        else if(tipo.equals("Producto"))
+        {
+            et_cantidad.setEnabled(true);
+        }
+    }
+
+    public boolean saveGasto()
+    {
+        try
+        {
+            et_cantidad.setError(null);
+            et_costo.setError(null);
+            et_descripcion.setError(null);
+            et_nombre.setError(null);
+            etDate.setError(null);
+            View focusView;
+
+            String tipo = (String) spinner_type.getSelectedItem();
+            String cat = (String) spinner_cat.getSelectedItem();
+            int catid = TableCategorias.getCatID(dbHelper.getReadableDatabase(), cat);
+            String desc = et_descripcion.getText().toString();
+            String nombre = et_nombre.getText().toString();
+            double costo;
+
+            if(TextUtils.isEmpty(nombre.trim()))
+            {
+                et_nombre.setError(getString(R.string.error_field_required));
+                focusView = et_nombre;
+                focusView.requestFocus();
+                return false;
+            }
+
+            try
+            {
+                costo = Double.parseDouble(et_costo.getText().toString());
+            }
+            catch (NumberFormatException ex)
+            {
+                et_costo.setError(getString(R.string.error_bad_input));
+                focusView = et_costo;
+                focusView.requestFocus();
+                return false;
+            }
+
+            if(!(costo > 0) )
+            {
+                et_costo.setError(getString(R.string.error_bad_input));
+                focusView = et_costo;
+                focusView.requestFocus();
+                return false;
+            }
+
+            if(tipo.equals("Producto") && et_cantidad.isEnabled())
+            {
+                int cantidad;
+
+                try
+                {
+                    cantidad = Integer.parseInt(et_cantidad.getText().toString());
+                }
+                catch (NumberFormatException ex)
+                {
+                    ex.printStackTrace();
+                    et_cantidad.setError(getString(R.string.error_bad_input));
+                    focusView = et_cantidad;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                if(!(cantidad > 0) )
+                {
+                    et_cantidad.setError(getString(R.string.error_bad_input));
+                    focusView = et_cantidad;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                if(TextUtils.isEmpty(desc.trim()))
+                {
+                    et_descripcion.setError(getString(R.string.error_field_required));
+                    focusView = et_descripcion;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                if(date == null)
+                {
+                    etDate.setError(getString(R.string.error_field_required));
+                    focusView = etDate;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                Gasto = new Producto(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        costo,
+                        cantidad,
+                        date);
+            }
+            else if(tipo.equals("Servicio"))
+            {
+                if(TextUtils.isEmpty(desc.trim()))
+                {
+                    et_descripcion.setError(getString(R.string.error_field_required));
+                    focusView = et_descripcion;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                if(date == null)
+                {
+                    etDate.setError(getString(R.string.error_field_required));
+                    focusView = etDate;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                Gasto = new Servicio(
+                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                        catid,
+                        desc,
+                        nombre,
+                        costo,
+                        date);
+            }
+            else
+            {
+                Toast.makeText(getActivity(), R.string.error_bad_input, Toast.LENGTH_SHORT).show();
+                return  false;
+            }
+
+            try
+            {
+                TableGastos.insert(dbHelper.getWritableDatabase(), Gasto);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return  true;
     }
 }

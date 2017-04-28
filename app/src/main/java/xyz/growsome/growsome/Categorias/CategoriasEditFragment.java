@@ -155,6 +155,7 @@ public class CategoriasEditFragment extends Fragment
             }
             catch (Exception ex)
             {
+                ex.printStackTrace();
                 Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -165,6 +166,7 @@ public class CategoriasEditFragment extends Fragment
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
             return false;
         }

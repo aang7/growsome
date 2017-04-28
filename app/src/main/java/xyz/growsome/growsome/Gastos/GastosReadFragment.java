@@ -1,6 +1,5 @@
 package xyz.growsome.growsome.Gastos;
 
-
 import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -36,9 +35,6 @@ import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class GastosReadFragment extends Fragment {
 
     DBHelper dbHelper;
@@ -60,18 +56,17 @@ public class GastosReadFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        dbHelper = new DBHelper(getActivity());
-
         ((Main)getActivity()).showDrawer(false);
         ((Main)getActivity()).showFAB(false);
 
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_gastos_read, container, false);
+
+        dbHelper = new DBHelper(getActivity());
 
         et_nombre = (EditText) view.findViewById(R.id.gastos_field_nombre);
         et_descripcion = (EditText) view.findViewById(R.id.gastos_field_desc);
@@ -97,22 +92,22 @@ public class GastosReadFragment extends Fragment {
 
         if (!readGasto())
         {
-            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
         }
 
-        return view; //Inflate the layout for this fragment
+        return view;
     }
 
-
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.edit_menu, menu);
-        menu.setGroupVisible(R.id.general_group, false); //hidding main items
+        menu.setGroupVisible(R.id.general_group, false);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId())
         {
             case R.id.action_edit:
@@ -132,9 +127,11 @@ public class GastosReadFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroyView()
+    {
         super.onDestroyView();
         ((Main)getActivity()).showDrawer(true);
+        dbHelper.close();
     }
 
     public boolean setup()
@@ -152,6 +149,12 @@ public class GastosReadFragment extends Fragment {
                 tipos.add(cursorTipos.getString(TableTipoGasto.COL_DESC_ID));
             }
         }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+            return false;
+        }
         finally
         {
             cursorTipos.close();
@@ -163,6 +166,12 @@ public class GastosReadFragment extends Fragment {
             {
                 cats.add(cursorCats.getString(TableCategorias.COL_NOMBRE_ID));
             }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+            return false;
         }
         finally
         {
@@ -255,20 +264,20 @@ public class GastosReadFragment extends Fragment {
             }
             catch (Exception ex)
             {
-                Log.d("Error", ex.toString());
                 ex.printStackTrace();
+                Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                 return false;
             }
             finally
             {
                 cursor.close();
-                dbHelper.close();
             }
 
         }
         catch (Exception ex)
         {
-            Log.d("Error", ex.toString());
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
             return false;
         }
 

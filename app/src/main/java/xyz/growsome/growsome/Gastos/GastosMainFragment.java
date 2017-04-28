@@ -1,6 +1,5 @@
 package xyz.growsome.growsome.Gastos;
 
-
 import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,10 +25,6 @@ import xyz.growsome.growsome.Utils.CustomAdapter;
 import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.ItemData;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class GastosMainFragment extends Fragment {
 
     DBHelper dbHelper;
@@ -40,28 +36,22 @@ public class GastosMainFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-
-        setHasOptionsMenu(true); //to display additional menu items
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    /* Esta cosa es del List Fragment*/
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         getActivity().setTitle(R.string.title_fragment_gastos);
+
+        ((Main)getActivity()).showFAB(false);
 
         View view = inflater.inflate(R.layout.fragment_gastos_main, container, false);
 
         dbHelper = new DBHelper(getActivity());
-
 
         Cursor cursor = dbHelper.selectQuery("select " +
                 "a." + TableGastos.COL_ICOD + ", " +
@@ -76,7 +66,6 @@ public class GastosMainFragment extends Fragment {
 
         listView=(ListView)view.findViewById(R.id.list);
 
-
         try
         {
             while (cursor.moveToNext())
@@ -90,20 +79,26 @@ public class GastosMainFragment extends Fragment {
                 lGastositems.add(itemData);
             }
         }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+            return view;
+        }
         finally
         {
             cursor.close();
         }
 
-        CustomAdapter adapter = new CustomAdapter(lGastositems,inflater.getContext()); /** Falta editar el custom adapter **/
-
+        CustomAdapter adapter = new CustomAdapter(lGastositems,inflater.getContext());
 
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 ItemData itemData = lGastositems.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putLong("id", itemData.getId());
@@ -113,22 +108,22 @@ public class GastosMainFragment extends Fragment {
             }
         });
 
-        ((Main)getActivity()).showFAB(false);
         registerForContextMenu(listView);
 
         return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.add_menu, menu);
-        menu.setGroupVisible(R.id.general_group, false); //hidding main items
+        menu.setGroupVisible(R.id.general_group, false);
     }
 
-
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Item Operations");
         menu.add(0, v.getId(), 0, "Edit Item");
@@ -136,11 +131,13 @@ public class GastosMainFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId())
         {
             case R.id.action_add:
                 ((Main) getActivity()).setFragment(new GastosAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -151,10 +148,11 @@ public class GastosMainFragment extends Fragment {
     {
         Bundle bundle = new Bundle();
         bundle.putLong("id", lGastositems.get(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position).getId());
-        GastosEditFragment fragment = new GastosEditFragment();
-        fragment.setArguments(bundle);
+
         if (item.getTitle() == "Edit Item")
         {
+            GastosEditFragment fragment = new GastosEditFragment();
+            fragment.setArguments(bundle);
             ((Main)getActivity()).setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         }
         else if (item.getTitle() == "Delete Item")
@@ -162,6 +160,7 @@ public class GastosMainFragment extends Fragment {
             //TODO: Delete item
             return true;
         }
+
         return super.onContextItemSelected(item);
     }
 }
