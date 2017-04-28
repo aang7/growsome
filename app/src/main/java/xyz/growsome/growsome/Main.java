@@ -1,17 +1,10 @@
 package xyz.growsome.growsome;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -26,17 +19,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
-
+import xyz.growsome.growsome.Categorias.CategoriasAddFragment;
 import xyz.growsome.growsome.Categorias.CategoriasMainFragment;
 import xyz.growsome.growsome.DBTables.TableUsuarios;
+import xyz.growsome.growsome.Gastos.GastosAddFragment;
 import xyz.growsome.growsome.Gastos.GastosMainFragment;
+import xyz.growsome.growsome.Ingresos.IngresosAddFragment;
 import xyz.growsome.growsome.Ingresos.IngresosMainFragment;
 import xyz.growsome.growsome.Utils.DBHelper;
 import xyz.growsome.growsome.Utils.JSONHelper;
@@ -49,7 +43,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private TextView navName;
     private TextView navEmail;
     private ImageView navImage;
-    private FloatingActionButton fab;
+    private FloatingActionMenu floatingActionMenu;
+    private FloatingActionButton fab_ingresos;
+    private FloatingActionButton fab_gastos;
+    private FloatingActionButton fab_categorias;
     private String userName = "";
     private String userEmail = "";
     ActionBarDrawerToggle toggle;
@@ -66,43 +63,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         setup();
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        floatingActionMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                //Codigo temporal para exportar la base de datos a Descargas;
-                try
-                {
-                    int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                    int request = 0;
-
-                    if(permissionCheck != PackageManager.PERMISSION_GRANTED)
-                    {
-                        ActivityCompat.requestPermissions(Main.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                request);
-                    }
-
-                    File backupDB = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                            "growsome.db");
-                    File currentDB = getApplicationContext().getDatabasePath("growsome.db");
-                    if (currentDB.exists()) {
-                        FileChannel src = new FileInputStream(currentDB).getChannel();
-                        FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                        dst.transferFrom(src, 0, src.size());
-                        src.close();
-                        dst.close();
-                    }
-                    Snackbar.make(view, "Database Exported", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-                catch(Exception ex)
-                {
-                    Log.d("FAILED", ex.toString());
-                    Snackbar.make(view, "Failed", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                }
             }
         });
 
@@ -165,7 +130,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         navName = (TextView) headerNV.findViewById(R.id.nav_name);
         navEmail = (TextView)  headerNV.findViewById(R.id.nav_email);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
+        floatingActionMenu.setClosedOnTouchOutside(true);
+        fab_ingresos = (FloatingActionButton) findViewById(R.id.fab_ingresos);
+        fab_gastos = (FloatingActionButton) findViewById(R.id.fab_gastos);
+        fab_categorias = (FloatingActionButton) findViewById(R.id.fab_categorias);
+
+        fab_ingresos.setOnClickListener(clickListener);
+        fab_gastos.setOnClickListener(clickListener);
+        fab_categorias.setOnClickListener(clickListener);
 
         /* Navigation Drawer */
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -175,6 +148,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         toggle.syncState();
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -289,11 +263,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     {
         if(value)
         {
-            fab.show();
+            floatingActionMenu.showMenuButton(true);
         }
         else
         {
-            fab.hide();
+            floatingActionMenu.hideMenuButton(true);
+
         }
     }
 
@@ -305,4 +280,22 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         toggle.setDrawerIndicatorEnabled(value);
     }
 
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.fab_ingresos:
+                    fragment = new IngresosAddFragment();
+                    break;
+                case R.id.fab_gastos:
+                    fragment = new GastosAddFragment();
+                    break;
+                case R.id.fab_categorias:
+                    fragment = new CategoriasAddFragment();
+                    break;
+            }
+
+            setFragment(fragment, true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        }
+    };
 }

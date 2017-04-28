@@ -41,10 +41,12 @@ public class HomeFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         getActivity().setTitle(R.string.title_fragment_home);
+        ((Main)getActivity()).showFAB(true);
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        //((Main)getActivity()).showFAB(true);
+
         dbHelper = new DBHelper(getActivity());
         tv_gastoTotal = (TextView) view.findViewById(R.id.tv_total_gastos);
         tv_ingresoTotal = (TextView) view.findViewById(R.id.tv_total_ingreso);
