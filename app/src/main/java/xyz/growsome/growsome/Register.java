@@ -122,11 +122,19 @@ public class Register extends AppCompatActivity {
                     showProgress(false);
                     if(!data.isEmpty())
                     {
-                        //TODO Se debe agregar logica para parsear el json
-                        Toast.makeText(Register.this, data, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Register.this, Login.class);
-                        startActivity(intent);
-                        finish(); ///Finaliza  la actividad
+                        if(error)
+                        {
+                            Toast.makeText(Register.this, data, Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            //TODO Se debe agregar logica para parsear el json
+                            Toast.makeText(Register.this, data, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Register.this, Main.class);
+                            intent.putExtra("webData", data);
+                            startActivity(intent);
+                            finish(); ///Finaliza  la actividad
+                        }
                     }
                     else
                     {
