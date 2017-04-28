@@ -63,6 +63,7 @@
     <string name="error_default">Ups! Something went wrong</string>
     <string name="error_repeated_category">Category name already used</string>
     <string name="error_bad_input">Wrong data entered</string>
+    <string name="error_without_category">You must have a category</string>
 
     <!-- Navigation Drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -161,5 +162,6 @@
 
     <string name="quantity">Quantity</string>
     <string name="valueupdate">Updated!</string>
+
 
 </resources>

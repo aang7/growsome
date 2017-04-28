@@ -1,6 +1,7 @@
 package xyz.growsome.growsome.Gastos;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -27,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import xyz.growsome.growsome.Categorias.CategoriasAddFragment;
 import xyz.growsome.growsome.DBTables.TableCategorias;
 import xyz.growsome.growsome.DBTables.TableGastos;
 import xyz.growsome.growsome.DBTables.TableTipoGasto;
@@ -260,6 +262,13 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
             try
             {
                 costo = Double.parseDouble(et_costo.getText().toString());
+                if(!(costo > 0) )
+                {
+                    et_costo.setError(getString(R.string.error_bad_input));
+                    focusView = et_costo;
+                    focusView.requestFocus();
+                    return false;
+                }
             }
             catch (NumberFormatException ex)
             {
@@ -269,13 +278,6 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                 return false;
             }
 
-            if(!(costo > 0) )
-            {
-                et_costo.setError(getString(R.string.error_bad_input));
-                focusView = et_costo;
-                focusView.requestFocus();
-                return false;
-            }
 
             if(tipo.equals("Producto") && et_cantidad.isEnabled())
             {
@@ -284,6 +286,13 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                 try
                 {
                     cantidad = Integer.parseInt(et_cantidad.getText().toString());
+                    if(!(cantidad > 0) )
+                    {
+                        et_cantidad.setError(getString(R.string.error_bad_input));
+                        focusView = et_cantidad;
+                        focusView.requestFocus();
+                        return false;
+                    }
                 }
                 catch (NumberFormatException ex)
                 {
@@ -294,13 +303,6 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                     return false;
                 }
 
-                if(!(cantidad > 0) )
-                {
-                    et_cantidad.setError(getString(R.string.error_bad_input));
-                    focusView = et_cantidad;
-                    focusView.requestFocus();
-                    return false;
-                }
 
                 if(TextUtils.isEmpty(desc.trim()))
                 {
@@ -318,14 +320,25 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                     return false;
                 }
 
-                Gasto = new Producto(
-                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                        catid,
-                        desc,
-                        nombre,
-                        costo,
-                        cantidad,
-                        date);
+
+                if (catid != 0)
+                {
+                    Gasto = new Producto(
+                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                            catid,
+                            desc,
+                            nombre,
+                            costo,
+                            cantidad,
+                            date);
+
+                }else
+                {
+                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
+                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    return false;
+                }
+
             }
             else if(tipo.equals("Servicio"))
             {
@@ -345,13 +358,22 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
                     return false;
                 }
 
-                Gasto = new Servicio(
-                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                        catid,
-                        desc,
-                        nombre,
-                        costo,
-                        date);
+                if (catid != 0)
+                {
+                    Gasto = new Servicio(
+                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                            catid,
+                            desc,
+                            nombre,
+                            costo,
+                            date);
+                }else
+                {
+                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
+                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    return false;
+                }
+
             }
             else
             {
@@ -361,7 +383,7 @@ public class GastosAddFragment extends Fragment implements DatePickerDialog.OnDa
 
             try
             {
-                TableGastos.insert(dbHelper.getWritableDatabase(), Gasto);
+                    TableGastos.insert(dbHelper.getWritableDatabase(), Gasto);
             }
             catch (Exception ex)
             {

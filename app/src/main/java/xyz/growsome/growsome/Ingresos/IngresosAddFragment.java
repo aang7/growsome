@@ -1,9 +1,11 @@
 package xyz.growsome.growsome.Ingresos;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import xyz.growsome.growsome.Categorias.CategoriasAddFragment;
 import xyz.growsome.growsome.Main;
 import xyz.growsome.growsome.R;
 import xyz.growsome.growsome.Utils.DBHelper;
@@ -91,10 +94,6 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
                 if(saveIngreso())
                 {
                     getFragmentManager().popBackStack();
-                }
-                else
-                {
-                    Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -188,42 +187,138 @@ public class IngresosAddFragment extends Fragment implements DatePickerDialog.On
     {
         try
         {
+            et_descripcion.setError(null);
+            et_nombre.setError(null);
+            et_monto.setError(null);
+            etDate.setError(null);
+
+            View focusView;
+
             String tipo = (String) spinner_type.getSelectedItem();
             String cat = (String) spinner_cat.getSelectedItem();
             int catid = TableCategorias.getCatID(dbHelper.getReadableDatabase(), cat);
             String desc = et_descripcion.getText().toString();
             String nombre = et_nombre.getText().toString();
-            double monto = Double.parseDouble(et_monto.getText().toString());
+            double monto;
+
+            if(TextUtils.isEmpty(nombre.trim()))
+            {
+                et_nombre.setError(getString(R.string.error_field_required));
+                focusView = et_nombre;
+                focusView.requestFocus();
+                return false;
+            }
+
+            try
+            {
+                monto = Double.parseDouble(et_monto.getText().toString());
+
+            }
+            catch (NumberFormatException ex)
+            {
+                et_monto.setError(getString(R.string.error_bad_input));
+                focusView = et_monto;
+                focusView.requestFocus();
+                return false;
+            }
+
+            if(!(monto > 0) )
+            {
+                et_monto.setError(getString(R.string.error_bad_input));
+                focusView = et_monto;
+                focusView.requestFocus();
+                return false;
+            }
 
             if(tipo.equals("Salario")) //tengo que generalizar esto
             {
-                Ingreso = new Salario(
-                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                        catid,
-                        desc,
-                        nombre,
-                        Double.parseDouble(et_monto.getText().toString()),
-                        date);
+                if(TextUtils.isEmpty(desc.trim()))
+                {
+                    et_descripcion.setError(getString(R.string.error_field_required));
+                    focusView = et_descripcion;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                if(date == null)
+                {
+                    etDate.setError(getString(R.string.error_field_required));
+                    focusView = etDate;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                if (catid != 0)
+                {
+                    Ingreso = new Salario(
+                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                            catid,
+                            desc,
+                            nombre,
+                            Double.parseDouble(et_monto.getText().toString()),
+                            date);
+                }else
+                {
+                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
+                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    return false;
+                }
             }
             else if(tipo.equals("Pago"))
             {
-                Ingreso = new Pago(
-                        TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
-                        catid,
-                        desc,
-                        nombre,
-                        monto,
-                        date);
+                if(TextUtils.isEmpty(desc.trim()))
+                {
+                    et_descripcion.setError(getString(R.string.error_field_required));
+                    focusView = et_descripcion;
+                    focusView.requestFocus();
+                    return false;
+                }
+
+                if(date == null)
+                {
+                    etDate.setError(getString(R.string.error_field_required));
+                    focusView = etDate;
+                    focusView.requestFocus();
+                    return false;
+                }
+                if (catid != 0)
+                {
+                    Ingreso = new Pago(
+                            TableUsuarios.getUserID(dbHelper.getReadableDatabase()),
+                            catid,
+                            desc,
+                            nombre,
+                            monto,
+                            date);
+
+                }else
+                {
+                    Toast.makeText(getActivity(), R.string.error_without_category, Toast.LENGTH_SHORT).show();
+                    ((Main)getActivity()).setFragment(new CategoriasAddFragment(), true, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    return false;
+                }
+
             }
             else
             {
+                Toast.makeText(getActivity(), R.string.error_bad_input, Toast.LENGTH_SHORT).show();
                 return  false;
             }
 
-            TableIngresos.insert(dbHelper.getWritableDatabase(), Ingreso);
+            try
+            {
+                TableIngresos.insert(dbHelper.getWritableDatabase(), Ingreso);
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+                Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
+            Toast.makeText(getActivity(), R.string.error_default, Toast.LENGTH_SHORT).show();
             return false;
         }
 

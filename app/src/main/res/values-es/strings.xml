@@ -40,5 +40,7 @@
     <string name="error_default">Ups! Algo salió mal</string>
     <string name="quantity">Cantidad</string>
     <string name="valueupdate">Actualizado!</string>
+    <string name="error_without_category">Necitas agregar una categoría</string>
+
 </resources>
 
