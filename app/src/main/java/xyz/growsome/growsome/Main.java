@@ -222,6 +222,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.about_item:
                 fragment = new HomeFragment();
                 break;
+            case R.id.action_logout:
+                this.deleteDatabase("growsome.db");
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+                return true;
             default:
                 fragment = new HomeFragment();
         }
